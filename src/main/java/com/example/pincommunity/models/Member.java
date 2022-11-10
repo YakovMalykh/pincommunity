@@ -1,6 +1,5 @@
 package com.example.pincommunity.models;
 
-import com.example.pincommunity.constants.Role;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,7 +12,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String username;
     private String photoPath;
     private String email;
     private String password;
@@ -22,7 +21,7 @@ public class Member {
     private Club currentClub;
     @OneToMany
     private List<Pin> pingalery;
-    private Role role;
+    private String role;
 
     public Member() {
     }
@@ -35,12 +34,12 @@ public class Member {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     public String getPhotoPath() {
@@ -91,11 +90,11 @@ public class Member {
         this.pingalery = pingalery;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -104,19 +103,19 @@ public class Member {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Member member = (Member) o;
-        return name.equals(member.name) && email.equals(member.email) && birthday.equals(member.birthday);
+        return username.equals(member.username) && email.equals(member.email) && birthday.equals(member.birthday);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, email, birthday);
+        return Objects.hash(username, email, birthday);
     }
 
     @Override
     public String toString() {
         return "Member{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + username + '\'' +
                 ", photoPath='" + photoPath + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
