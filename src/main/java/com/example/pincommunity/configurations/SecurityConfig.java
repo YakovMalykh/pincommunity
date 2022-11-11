@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .mvcMatchers("/profile").hasAuthority("ADMIN")
                         .mvcMatchers("/authenticated").authenticated()
                         .mvcMatchers("/").permitAll()
+                        .mvcMatchers("/registration").permitAll()
                 )
                 .formLogin(withDefaults())
                 .httpBasic(withDefaults());

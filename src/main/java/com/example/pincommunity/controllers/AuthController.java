@@ -1,15 +1,20 @@
 package com.example.pincommunity.controllers;
 
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.pincommunity.servicies.MemberService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
 @RestController
 //@EnableGlobalMethodSecurity(securedEnabled = true)
 public class AuthController {
+
+    private final MemberService memberService;
+
+    public AuthController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     @GetMapping("/")
     public String homePage() {
@@ -28,4 +33,15 @@ public class AuthController {
     public String pageProfile(Principal principal) {
         return "profile page " + principal.getName();
     }
+    @PostMapping("/registration")
+    public ResponseEntity<Void> createMember(@RequestParam String username, @RequestParam String password) {
+        boolean saccess = memberService.createMember(username, password);
+        if (!saccess) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+
+    }
+
 }
