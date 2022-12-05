@@ -27,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean createMember(String username, String password) {
-        Optional<Member> optionalMember = memberRepository.getMemberByUsername(username);
+        Optional<Member> optionalMember = memberRepository.getMemberByUsernameIgnoreCase(username);
         if (!optionalMember.isPresent()) {
             String encodedPassword = passwordEncoder.encode(password);
             Member member = new Member();

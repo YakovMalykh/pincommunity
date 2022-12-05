@@ -33,6 +33,7 @@ public class AuthController {
     public String pageProfile(Principal principal) {
         return "profile page " + principal.getName();
     }
+
     @PostMapping("/registration")
     public ResponseEntity<Void> createMember(@RequestParam String username, @RequestParam String password) {
         boolean saccess = memberService.createMember(username, password);
