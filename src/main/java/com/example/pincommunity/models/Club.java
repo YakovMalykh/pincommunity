@@ -17,6 +17,10 @@ public class Club {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String city;
+    @OneToOne
+    @JoinColumn(name = "clubs_admin")
+    private Member admin;
+
 //    @OneToMany(mappedBy = "currentClub")
 //    private List<Member> members;
 //    @OneToMany(mappedBy = "originClub")
