@@ -26,7 +26,7 @@ public class PinController {
 
     @Operation(description = "getting all pins of this member")
     @GetMapping
-    public ResponseEntity<ResponseWrapperPinDto> getAllpins() {
+    public ResponseEntity<ResponseWrapperPinDto> getAllPins() {
         return ResponseEntity.ok(new ResponseWrapperPinDto());
     }
 

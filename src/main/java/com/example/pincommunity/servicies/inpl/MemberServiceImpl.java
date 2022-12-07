@@ -40,4 +40,11 @@ public class MemberServiceImpl implements MemberService {
         }
         return false;
     }
+
+    @Override
+    public boolean isUserExists(String email) {
+        Optional<Member> optionalMember = memberRepository.getMemberByUsernameIgnoreCase(email);
+        return optionalMember.isPresent();
+    }
+
 }
