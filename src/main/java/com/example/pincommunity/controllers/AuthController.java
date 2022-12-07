@@ -1,5 +1,6 @@
 package com.example.pincommunity.controllers;
 
+import com.example.pincommunity.dto.CreateMemberDto;
 import com.example.pincommunity.servicies.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +36,8 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<Void> createMember(@RequestParam String username, @RequestParam String password) {
-        boolean saccess = memberService.createMember(username, password);
+    public ResponseEntity<Void> createMember(@RequestBody CreateMemberDto createMemberDto) {
+        boolean saccess = memberService.createMember(createMemberDto);
         if (!saccess) {
             return ResponseEntity.badRequest().build();
         } else {
