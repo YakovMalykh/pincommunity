@@ -43,7 +43,8 @@ public class SecurityConfig {
                         .mvcMatchers("/").permitAll()
                         .mvcMatchers("/registration").permitAll()
                 )
-                .formLogin(withDefaults())
+                .cors().and()
+//                .formLogin(withDefaults())
                 .httpBasic(withDefaults());
         return http.build();
     }

@@ -1,5 +1,6 @@
 package com.example.pincommunity.servicies.inpl;
 
+import com.example.pincommunity.dto.CreateMemberDto;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.MemberRepository;
 import com.example.pincommunity.servicies.MemberService;
@@ -26,12 +27,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean createMember(String username, String password) {
-        Optional<Member> optionalMember = memberRepository.getMemberByUsernameIgnoreCase(username);
-        if (!optionalMember.isPresent()) {
-            String encodedPassword = passwordEncoder.encode(password);
+    public boolean createMember(CreateMemberDto createMemberDto) {
+        Optional<Member> optionalMember = memberRepository.getMemberByUsernameIgnoreCase(createMemberDto.getEmail());
+        if (optionalMember.isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(createMemberDto.getPassword());
             Member member = new Member();
-            member.setUsername(username);
+            member.setUsername(createMemberDto.getEmail());
             member.setPassword(encodedPassword);
             member.setRole(USER.name());
             memberRepository.save(member);
@@ -39,4 +40,11 @@ public class MemberServiceImpl implements MemberService {
         }
         return false;
     }
+
+    @Override
+    public boolean isUserExists(String email) {
+        Optional<Member> optionalMember = memberRepository.getMemberByUsernameIgnoreCase(email);
+        return optionalMember.isPresent();
+    }
+
 }

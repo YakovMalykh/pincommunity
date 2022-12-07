@@ -69,5 +69,5 @@ VALUES ('superadmin@superadmin.com', 'SUPER_ADMIN',
 ALTER TABLE clubs ADD COLUMN clubs_admin BIGINT REFERENCES members (id);
 
 -- changeset ymalykh:3
-ALTER  TABLE avatars ADD COLUMN url VARCHAR(255) NOT NULL;
-ALTER  TABLE pictures ADD COLUMN url VARCHAR(255) NOT NULL;
+ALTER  TABLE avatars ADD COLUMN url VARCHAR(255);
+ALTER  TABLE pictures ADD COLUMN url VARCHAR(255);
