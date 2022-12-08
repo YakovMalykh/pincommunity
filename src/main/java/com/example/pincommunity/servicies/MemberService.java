@@ -6,5 +6,5 @@ import com.example.pincommunity.dto.CreateMemberDto;
 public interface MemberService {
     boolean createMember(CreateMemberDto createMemberDto);
 
-    boolean isUserExists(String email);
+    boolean isMemberExists(String email);
 }

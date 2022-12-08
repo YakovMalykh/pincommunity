@@ -2,37 +2,38 @@ package com.example.pincommunity.controllers;
 
 import com.example.pincommunity.dto.CreateMemberDto;
 import com.example.pincommunity.dto.LoginDto;
-import com.example.pincommunity.servicies.MemberService;
+import com.example.pincommunity.servicies.AuthService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 //@EnableGlobalMethodSecurity(securedEnabled = true)
 public class AuthController {
 
-    private final MemberService memberService;
+    private final AuthService authService;
 
-    public AuthController(MemberService memberService) {
-        this.memberService = memberService;
-    }
-    @PostMapping("/registration")
-    public ResponseEntity<?> createMember(@RequestBody CreateMemberDto createMemberDto) {
-        boolean saccess = memberService.createMember(createMemberDto);
-        if (!saccess) {
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
-        boolean isMemberExists = memberService.isUserExists(loginDto.getEmail());
-        if (!isMemberExists) {
-            return ResponseEntity.badRequest().build();
-        } else {
+        if (authService.login(loginDto.getEmail(), loginDto.getPassword())) {
             return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+    @PostMapping("/registration")
+    public ResponseEntity<?> registration(@RequestBody CreateMemberDto createMemberDto) {
+        if (authService.registration(createMemberDto)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
 }

@@ -20,7 +20,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;//переименовать на username
+    private String username;
     private String role;
     private String password;
     @Column(name = "full_name")
