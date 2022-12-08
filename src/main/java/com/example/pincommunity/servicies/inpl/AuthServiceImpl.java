@@ -27,7 +27,6 @@ public class AuthServiceImpl implements AuthService {
             log.info("Member doesn't exist");
             return false;
         } else {
-            // нужно проверить, что будет, если мы укажем не существующего пользователя
             UserDetails userDetails = userService.loadUserByUsername(email);
             String encodedPassword = userDetails.getPassword();
             return encoder.matches(password, encodedPassword);

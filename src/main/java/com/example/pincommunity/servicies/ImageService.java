@@ -7,16 +7,17 @@ public interface ImageService<I> {
 
     /**
      * method fills and saves Picture or Avatar into DB
-     * @param file MultipartFile
+     *
+     * @param file        MultipartFile
      * @param newFileName String
-     * @param image - Picture or Avatar
+     * @param image       - Picture or Avatar
      * @return saved Picture or Avatar
      */
-    I saveImage(MultipartFile file,String newFileName, I image);
+    I saveImage(MultipartFile file, String newFileName, I image);
 
     ResponseEntity<I> getImageById(Long id);
 
-    ResponseEntity<I> updateImage(I image);
+    I updateImage(I image, MultipartFile file);
 
     ResponseEntity<Void> deleteImageById(Long id);
 }

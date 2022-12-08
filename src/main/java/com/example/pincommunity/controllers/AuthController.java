@@ -3,6 +3,8 @@ package com.example.pincommunity.controllers;
 import com.example.pincommunity.dto.CreateMemberDto;
 import com.example.pincommunity.dto.LoginDto;
 import com.example.pincommunity.servicies.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,9 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Operation(description = "Login", responses = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "403", description = "forbidden")})
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
         if (authService.login(loginDto.getEmail(), loginDto.getPassword())) {
@@ -25,7 +30,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-
+    @Operation(description = "Registration", responses = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "member already exists")})
     @PostMapping("/registration")
     public ResponseEntity<?> registration(@RequestBody CreateMemberDto createMemberDto) {
         if (authService.registration(createMemberDto)) {

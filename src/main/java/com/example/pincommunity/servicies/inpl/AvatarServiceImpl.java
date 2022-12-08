@@ -1,5 +1,6 @@
 package com.example.pincommunity.servicies.inpl;
 
+import com.example.pincommunity.exceptions.AvatarNotFoundException;
 import com.example.pincommunity.models.Avatar;
 import com.example.pincommunity.repositories.AvatarRepository;
 import com.example.pincommunity.servicies.FileHandler;
@@ -37,19 +38,24 @@ public class AvatarServiceImpl implements ImageService<Avatar> {
         avatar.setPreview(preview);
 
         Avatar savedAvatar = avatarRepository.save(avatar);//here I need get ID, for creating url and then write it into DB
-        savedAvatar.setAvatarUrl(String.format("/avatars/%s" + savedAvatar.getId()));
+        savedAvatar.setAvatarUrl(String.format("/avatars/preview/%s", savedAvatar.getId()));
         log.info("Avatar was saved");
         return avatarRepository.save(savedAvatar);
     }
 
     @Override
     public ResponseEntity<Avatar> getImageById(Long id) {
-        return null;
+        Avatar avatar = avatarRepository.findById(id).orElseThrow(()->new AvatarNotFoundException("Avatar doesn't exist"));
+        return ResponseEntity.ok(avatar);
     }
 
     @Override
-    public ResponseEntity<Avatar> updateImage(Avatar image) {
-        return null;
+    public Avatar updateImage(Avatar avatar, MultipartFile file) {
+        String filePathInFolder = avatar.getFilePathInFolder();
+        FileHandler.overwritesFileInFolder(file, filePathInFolder);
+        byte[] preview = FileHandler.generatePreview(filePathInFolder);
+        avatar.setPreview(preview);
+        return avatarRepository.save(avatar);
     }
 
     @Override

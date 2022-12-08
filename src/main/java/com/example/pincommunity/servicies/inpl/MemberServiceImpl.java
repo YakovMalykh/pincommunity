@@ -1,13 +1,18 @@
 package com.example.pincommunity.servicies.inpl;
 
 import com.example.pincommunity.dto.CreateMemberDto;
+import com.example.pincommunity.exceptions.MemberNotFoundException;
 import com.example.pincommunity.mappers.MemberMapper;
+import com.example.pincommunity.models.Avatar;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.MemberRepository;
+import com.example.pincommunity.servicies.ImageService;
 import com.example.pincommunity.servicies.MemberService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 
@@ -16,10 +21,19 @@ import java.util.Optional;
 @Slf4j
 @Service
 @Transactional
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    @Qualifier("AvatarServiceImpl")
+    private final ImageService<Avatar> avatarService;
+
+    public MemberServiceImpl(MemberRepository memberRepository, MemberMapper memberMapper, ImageService<Avatar> avatarService) {
+        this.memberRepository = memberRepository;
+        this.memberMapper = memberMapper;
+        this.avatarService = avatarService;
+    }
+
 
     @Override
     public boolean createMember(CreateMemberDto createMemberDto) {
@@ -33,6 +47,25 @@ public class MemberServiceImpl implements MemberService {
     public boolean isMemberExists(String email) {
         Optional<Member> optionalMember = memberRepository.getMemberByUsernameIgnoreCase(email);
         return optionalMember.isPresent();
+    }
+
+    @Override
+    public ResponseEntity<Void> updateAvatar(Long id, MultipartFile file) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist"));
+        if (member.getAvatar() == null) {
+            log.info("Member " + member.getId() + " don't have any avatar");
+            Avatar avatar = new Avatar();
+            Avatar savedAvatar = avatarService.saveImage(file, member.getFullName(), avatar);
+            member.setAvatar(savedAvatar);
+            memberRepository.save(member);
+            log.info("new Avatar is installed");
+            return ResponseEntity.ok().build();
+        } else {
+            Avatar updatedAvatar = avatarService.updateImage(member.getAvatar(), file);
+            member.setAvatar(updatedAvatar);
+            log.info("Avatar has been update");
+            return ResponseEntity.ok().build();
+        }
     }
 
 }
