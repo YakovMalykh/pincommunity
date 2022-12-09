@@ -22,6 +22,8 @@ public class MemberController {
 
     @Operation(summary = "update member", responses = {
             @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorised"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "member or club doesn't exist")
     })
     @PatchMapping("/{id}")
@@ -30,8 +32,10 @@ public class MemberController {
     }
 
     @Operation(summary = "update avatar", responses = {
-            @ApiResponse(responseCode = "404", description = "member doesn't exist"),
-            @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorised"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "member doesn't exist")
     })
     @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateAvatar(@PathVariable Long id, @RequestPart MultipartFile file) {
@@ -39,8 +43,14 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "getting current member", responses = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorised"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "member doesn't exist")
+    })
     @GetMapping("/me")
-    public ResponseEntity<MemberDto> getMember(Authentication authentication) {
-        return ResponseEntity.ok(new MemberDto());
+    public ResponseEntity<MemberDto> getMemberMe(Authentication authentication) {
+        return memberService.getMemberMe(authentication);
     }
 }

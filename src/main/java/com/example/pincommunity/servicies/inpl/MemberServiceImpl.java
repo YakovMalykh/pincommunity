@@ -12,6 +12,7 @@ import com.example.pincommunity.servicies.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +57,7 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.updateMemberFromMemberDto(memberDto, member);
         Member updatedMember = memberRepository.save(member);
         MemberDto updatedMemberDto = memberMapper.memberToMemberDto(updatedMember);
+        log.info("Member " + updatedMemberDto.getEmail() + " has been gotten");
         return ResponseEntity.ok(updatedMemberDto);
     }
 
@@ -76,6 +78,15 @@ public class MemberServiceImpl implements MemberService {
             log.info("Avatar has been update");
             return ResponseEntity.ok().build();
         }
+    }
+
+    @Override
+    public ResponseEntity<MemberDto> getMemberMe(Authentication authentication) {
+        Member member = memberRepository.getMemberByUsernameIgnoreCase(authentication.getName()).orElseThrow(() ->
+                new MemberNotFoundException("Member wasn't found. MemberServiceImpl.class, method getMemberMe"));
+        MemberDto memberDto = memberMapper.memberToMemberDto(member);
+        log.info("Member " + authentication.getName() + " has been gotten");
+        return ResponseEntity.ok(memberDto);
     }
 
 }
