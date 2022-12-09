@@ -52,6 +52,6 @@ public class AvatarController {
         Avatar avatar = avatarService.getImageById(avatarId).getBody();
         Path path = Path.of(avatar.getFilePathInFolder());
         String mediaType = avatar.getMediaType();
-        FileHandler.uploadImageFromFolder(path,response,mediaType);
+        FileHandler.uploadImageFromFolder(path, response, mediaType);
     }
 }

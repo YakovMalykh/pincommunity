@@ -1,6 +1,5 @@
 package com.example.pincommunity.servicies.inpl;
 
-import com.example.pincommunity.exceptions.AvatarNotFoundException;
 import com.example.pincommunity.models.Avatar;
 import com.example.pincommunity.repositories.AvatarRepository;
 import com.example.pincommunity.servicies.FileHandler;
@@ -45,8 +44,16 @@ public class AvatarServiceImpl implements ImageService<Avatar> {
 
     @Override
     public ResponseEntity<Avatar> getImageById(Long id) {
-        Avatar avatar = avatarRepository.findById(id).orElseThrow(()->new AvatarNotFoundException("Avatar doesn't exist"));
+        Avatar avatar = avatarRepository.findById(id).orElse(getDefaultAvatar());
         return ResponseEntity.ok(avatar);
+    }
+
+    private Avatar getDefaultAvatar() {
+        Avatar avatar = new Avatar();
+        avatar.setFilePathInFolder("avatars/logo.jpg");
+        avatar.setMediaType("image/png");
+        avatar.setPreview(FileHandler.generatePreview(avatar.getFilePathInFolder()));
+        return avatar;
     }
 
     @Override
@@ -60,6 +67,7 @@ public class AvatarServiceImpl implements ImageService<Avatar> {
 
     @Override
     public ResponseEntity<Void> deleteImageById(Long id) {
+        // не знаю поканужен ли он
         return null;
     }
 }

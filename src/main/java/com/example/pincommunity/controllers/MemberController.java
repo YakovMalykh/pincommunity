@@ -22,6 +22,7 @@ public class MemberController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<MemberDto> updateMember(@PathVariable Long id, @RequestBody MemberDto memberDto) {
+
         return ResponseEntity.ok(new MemberDto());
     }
 

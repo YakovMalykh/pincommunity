@@ -1,6 +1,7 @@
 package com.example.pincommunity.servicies.inpl;
 
 import com.example.pincommunity.dto.CreateMemberDto;
+import com.example.pincommunity.dto.MemberDto;
 import com.example.pincommunity.exceptions.MemberNotFoundException;
 import com.example.pincommunity.mappers.MemberMapper;
 import com.example.pincommunity.models.Avatar;
@@ -47,6 +48,12 @@ public class MemberServiceImpl implements MemberService {
     public boolean isMemberExists(String email) {
         Optional<Member> optionalMember = memberRepository.getMemberByUsernameIgnoreCase(email);
         return optionalMember.isPresent();
+    }
+
+    @Override
+    public ResponseEntity<MemberDto> updateMember(Long id, MemberDto memberDto) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist"));
+        return ResponseEntity.ok(memberDto);
     }
 
     @Override
