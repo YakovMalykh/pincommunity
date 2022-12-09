@@ -37,23 +37,37 @@ public class AvatarServiceImpl implements ImageService<Avatar> {
         avatar.setPreview(preview);
 
         Avatar savedAvatar = avatarRepository.save(avatar);//here I need get ID, for creating url and then write it into DB
-        savedAvatar.setAvatarUrl(String.format("/avatars/%s" + savedAvatar.getId()));
+        savedAvatar.setAvatarUrl(String.format("/avatars/preview/%s", savedAvatar.getId()));
         log.info("Avatar was saved");
         return avatarRepository.save(savedAvatar);
     }
 
     @Override
     public ResponseEntity<Avatar> getImageById(Long id) {
-        return null;
+        Avatar avatar = avatarRepository.findById(id).orElse(getDefaultAvatar());
+        return ResponseEntity.ok(avatar);
+    }
+
+    private Avatar getDefaultAvatar() {
+        Avatar avatar = new Avatar();
+        avatar.setFilePathInFolder("avatars/logo.jpg");
+        avatar.setMediaType("image/png");
+        avatar.setPreview(FileHandler.generatePreview(avatar.getFilePathInFolder()));
+        return avatar;
     }
 
     @Override
-    public ResponseEntity<Avatar> updateImage(Avatar image) {
-        return null;
+    public Avatar updateImage(Avatar avatar, MultipartFile file) {
+        String filePathInFolder = avatar.getFilePathInFolder();
+        FileHandler.overwritesFileInFolder(file, filePathInFolder);
+        byte[] preview = FileHandler.generatePreview(filePathInFolder);
+        avatar.setPreview(preview);
+        return avatarRepository.save(avatar);
     }
 
     @Override
     public ResponseEntity<Void> deleteImageById(Long id) {
+        // не знаю поканужен ли он
         return null;
     }
 }

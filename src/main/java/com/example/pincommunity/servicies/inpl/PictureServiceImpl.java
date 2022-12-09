@@ -48,7 +48,7 @@ public class PictureServiceImpl implements ImageService<Picture> {
     }
 
     @Override
-    public ResponseEntity<Picture> updateImage(Picture image) {
+    public Picture updateImage(Picture image, MultipartFile file) {
         return null;
     }
 

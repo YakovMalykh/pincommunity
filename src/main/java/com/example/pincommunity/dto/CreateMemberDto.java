@@ -1,5 +1,6 @@
 package com.example.pincommunity.dto;
 
+import com.example.pincommunity.constants.Role;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
@@ -16,4 +17,5 @@ public class CreateMemberDto {
     private String password;
     @NotBlank
     private String fullName;
+    private Role role;
 }
