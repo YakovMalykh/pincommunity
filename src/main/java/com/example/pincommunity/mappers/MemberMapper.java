@@ -21,14 +21,18 @@ public abstract class MemberMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "avatar", ignore = true)
     @Mapping(target = "username", ignore = true)
+    @Mapping(target = "currentClub",source = "clubCity")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateMemberFromMemberDto(MemberDto memberDto, @MappingTarget Member member);
 
     public Club stringToClub(String clubCity) {
-        return clubRepository.findByCityIgnoreCase(clubCity).orElseThrow(() -> new ClubNotFoundException("Club with city: " + clubCity + " doesn't exist"));
+        return clubRepository.findByCityIgnoreCase(clubCity).orElseThrow(() ->
+                new ClubNotFoundException("Club with city: " + clubCity + " doesn't exist. See MemberMapper.class, stringToClub method"));
     }
 
     @Mapping(target = "email",source = "username")
+    @Mapping(target = "avatarUrl",source = "avatar")
+    @Mapping(target = "clubCity",source = "currentClub")
     public abstract MemberDto memberToMemberDto(Member member);
     public String avatarToString(Avatar avatar) {
         return avatar.getAvatarUrl();

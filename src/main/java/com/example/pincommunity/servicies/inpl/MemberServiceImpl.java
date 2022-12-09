@@ -52,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResponseEntity<MemberDto> updateMember(Long id, MemberDto memberDto) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist"));
+        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist. MemberServiceImpl.class, method updateMember"));
         memberMapper.updateMemberFromMemberDto(memberDto, member);
         Member updatedMember = memberRepository.save(member);
         MemberDto updatedMemberDto = memberMapper.memberToMemberDto(updatedMember);
@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResponseEntity<Void> updateAvatar(Long id, MultipartFile file) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist"));
+        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist. MemberServiceImpl.class, method updateMember"));
         if (member.getAvatar() == null) {
             log.info("Member " + member.getId() + " don't have any avatar");
             Avatar avatar = new Avatar();
