@@ -53,7 +53,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ResponseEntity<MemberDto> updateMember(Long id, MemberDto memberDto) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist"));
-        return ResponseEntity.ok(memberDto);
+        memberMapper.updateMemberFromMemberDto(memberDto, member);
+        Member updatedMember = memberRepository.save(member);
+        MemberDto updatedMemberDto = memberMapper.memberToMemberDto(updatedMember);
+        return ResponseEntity.ok(updatedMemberDto);
     }
 
     @Override

@@ -20,18 +20,21 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @Operation(summary = "update member", responses = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "member or club doesn't exist")
+    })
     @PatchMapping("/{id}")
     public ResponseEntity<MemberDto> updateMember(@PathVariable Long id, @RequestBody MemberDto memberDto) {
-
-        return ResponseEntity.ok(new MemberDto());
+        return memberService.updateMember(id, memberDto);
     }
 
-    @Operation(summary = "update avatar",responses = {
+    @Operation(summary = "update avatar", responses = {
             @ApiResponse(responseCode = "404", description = "member doesn't exist"),
             @ApiResponse(responseCode = "200", description = "OK")
     })
     @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateAvatar (@PathVariable Long id, @RequestPart MultipartFile file) {
+    public ResponseEntity<Void> updateAvatar(@PathVariable Long id, @RequestPart MultipartFile file) {
         memberService.updateAvatar(id, file);
         return ResponseEntity.ok().build();
     }
