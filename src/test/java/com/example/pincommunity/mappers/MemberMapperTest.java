@@ -2,6 +2,7 @@ package com.example.pincommunity.mappers;
 
 import com.example.pincommunity.Constatnts.ConstantsForTests;
 import com.example.pincommunity.constants.Role;
+import com.example.pincommunity.exceptions.ClubNotFoundException;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.ClubRepository;
 import org.junit.jupiter.api.Assertions;
@@ -11,11 +12,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 import static com.example.pincommunity.Constatnts.ConstantsForTests.*;
 import static com.example.pincommunity.constants.Role.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class MemberMapperTest {
     @Mock
@@ -51,8 +58,25 @@ class MemberMapperTest {
     }
 
     @Test
-    void updateMemberFromMemberDto() {
-//        memberMapper.updateMemberFromMemberDto();
+    void updateMemberFromMemberDto_whenSuccessful() {
+        when(clubRepository.findByCityIgnoreCase(anyString())).thenReturn(Optional.of(CLUB));
+        memberMapper.updateMemberFromMemberDto(MEMBER_DTO, MEMBER);
+        assertNull(MEMBER.getId());
+        assertNull(MEMBER.getUsername());
+        assertEquals(FULL_NAME, MEMBER.getFullName());
+        assertEquals(TEST_DATE, MEMBER.getBirthday());
+        assertNull(MEMBER.getAvatar());
+        assertEquals(CLUB, MEMBER.getCurrentClub());
+    }
+
+    @Test
+    void updateMemberFromMemberDto_whenFailed() {
+        when(clubRepository.findByCityIgnoreCase(anyString())).thenReturn(Optional.empty());
+        ClubNotFoundException exception = assertThrows(ClubNotFoundException.class, () -> {
+            memberMapper.updateMemberFromMemberDto(MEMBER_DTO, MEMBER);
+        });
+        String[] stringsArray = exception.getMessage().split(" ");
+        assertEquals("Club", stringsArray[0]);
     }
 
     @Test
