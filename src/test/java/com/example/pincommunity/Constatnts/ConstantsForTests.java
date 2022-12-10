@@ -14,7 +14,10 @@ public class ConstantsForTests {
 
     public static final CreateMemberDto CREATE_MEMBER_DTO = new CreateMemberDto();
     public static final Member MEMBER = new Member();
+    public static final Member MEMBER_2 = new Member();
+
     public static final MemberDto MEMBER_DTO = new MemberDto();
+    public static final MemberDto MEMBER_DTO_2 = new MemberDto();
     public static final Club CLUB = new Club();
     public static final Avatar AVATAR = new Avatar();
     public static final String CLUB_CITY = "BERLIN";

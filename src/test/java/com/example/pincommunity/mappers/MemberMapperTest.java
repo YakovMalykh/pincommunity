@@ -2,6 +2,7 @@ package com.example.pincommunity.mappers;
 
 import com.example.pincommunity.Constatnts.ConstantsForTests;
 import com.example.pincommunity.constants.Role;
+import com.example.pincommunity.dto.MemberDto;
 import com.example.pincommunity.exceptions.ClubNotFoundException;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.ClubRepository;
@@ -44,6 +45,15 @@ class MemberMapperTest {
         MEMBER_DTO.setAvatarUrl(TEST_URL);
         MEMBER_DTO.setClubCity(CLUB_CITY);
 
+        MEMBER_2.setId(2L);
+        MEMBER_2.setUsername(EMAIL);
+        MEMBER_2.setFullName(FULL_NAME);
+        MEMBER_2.setBirthday(TEST_DATE);
+        MEMBER_2.setAvatar(AVATAR);
+        MEMBER_2.setCurrentClub(CLUB);
+
+        AVATAR.setAvatarUrl(TEST_URL);
+        CLUB.setCity(CLUB_CITY);
 
     }
 
@@ -80,18 +90,25 @@ class MemberMapperTest {
     }
 
     @Test
-    void stringToClub() {
-    }
-
-    @Test
     void memberToMemberDto() {
+        MemberDto memberDto = memberMapper.memberToMemberDto(MEMBER_2);
+        assertEquals(2L, memberDto.getId());
+        assertEquals(EMAIL, memberDto.getEmail());
+        assertEquals(FULL_NAME, memberDto.getFullName());
+        assertEquals(TEST_DATE, memberDto.getBirthday());
+        assertEquals(TEST_URL, memberDto.getAvatarUrl());
+        assertEquals(CLUB_CITY, memberDto.getClubCity());
     }
 
     @Test
-    void avatarToString() {
+    void avatarToString_whenAvatarIsNull() {
+        String avatarUrl = memberMapper.avatarToString(null);
+        assertEquals(null, avatarUrl);
     }
 
     @Test
-    void clubToString() {
+    void clubToString_whenClubIsNull() {
+        String clubCity = memberMapper.clubToString(null);
+        assertEquals(null, clubCity);
     }
 }
