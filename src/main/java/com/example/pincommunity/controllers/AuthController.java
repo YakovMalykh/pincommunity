@@ -9,10 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
+@Validated
 @RequiredArgsConstructor
 //@EnableGlobalMethodSecurity(securedEnabled = true)
 public class AuthController {
@@ -23,7 +27,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "forbidden")})
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto) {
         if (authService.login(loginDto.getEmail(), loginDto.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
