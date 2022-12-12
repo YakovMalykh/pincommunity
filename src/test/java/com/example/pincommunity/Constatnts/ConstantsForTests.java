@@ -5,6 +5,7 @@ import com.example.pincommunity.dto.MemberDto;
 import com.example.pincommunity.models.Avatar;
 import com.example.pincommunity.models.Club;
 import com.example.pincommunity.models.Member;
+import com.example.pincommunity.models.Picture;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +28,7 @@ public class ConstantsForTests {
     public static final MemberDto MEMBER_DTO_2 = new MemberDto();
     public static final Club CLUB = new Club();
     public static final Avatar AVATAR = new Avatar();
+    public static final Picture PICTURE = new Picture();
     public static final String CLUB_CITY = "BERLIN";
     public static final String EMAIL = "test@tset.ru";
     public static final String PASSWORD = "password";
