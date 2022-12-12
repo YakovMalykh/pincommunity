@@ -10,8 +10,11 @@ import javax.validation.constraints.NotBlank;
 @Validated
 public class LoginDto {
     @NotBlank
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", message = "Email should be correct address")
+    @Email
+            (
+//                    regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+                    message = "Email should be correct address")
     private String email;
-    @NotBlank
+    @NotBlank(message = "shouldn't be a blank")
     private String password;
 }
