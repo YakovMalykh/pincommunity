@@ -5,10 +5,16 @@ import com.example.pincommunity.dto.MemberDto;
 import com.example.pincommunity.models.Avatar;
 import com.example.pincommunity.models.Club;
 import com.example.pincommunity.models.Member;
-import org.springframework.format.number.PercentStyleFormatter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 public class ConstantsForTests {
 
@@ -30,5 +36,82 @@ public class ConstantsForTests {
     public static final LocalDate TEST_DATE = LocalDate.parse(DATE, DateTimeFormatter.ofPattern(DATE_FORMAT));
     public static final String TEST_URL = "test url";
 
+    public static final MultipartFile FILE = new MultipartFile() {
+        @Override
+        public String getName() {
+            return null;
+        }
+
+        @Override
+        public String getOriginalFilename() {
+            return null;
+        }
+
+        @Override
+        public String getContentType() {
+            return null;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return false;
+        }
+
+        @Override
+        public long getSize() {
+            return 0;
+        }
+
+        @Override
+        public byte[] getBytes() throws IOException {
+            return new byte[0];
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return null;
+        }
+
+        @Override
+        public void transferTo(File dest) throws IOException, IllegalStateException {
+
+        }
+    };
+    public static final Authentication AUTHENTICATION = new Authentication() {
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return null;
+        }
+
+        @Override
+        public Object getCredentials() {
+            return null;
+        }
+
+        @Override
+        public Object getDetails() {
+            return null;
+        }
+
+        @Override
+        public Object getPrincipal() {
+            return null;
+        }
+
+        @Override
+        public boolean isAuthenticated() {
+            return false;
+        }
+
+        @Override
+        public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public String getName() {
+            return "test";
+        }
+    };
 
 }
