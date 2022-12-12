@@ -9,12 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/members")
 public class MemberController {
 
@@ -27,7 +31,7 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "member or club doesn't exist")
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<MemberDto> updateMember(@PathVariable Long id, @RequestBody MemberDto memberDto) {
+    public ResponseEntity<MemberDto> updateMember(@Valid @PathVariable Long id, @RequestBody MemberDto memberDto) {
         return memberService.updateMember(id, memberDto);
     }
 

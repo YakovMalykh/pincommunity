@@ -1,5 +1,6 @@
 package com.example.pincommunity.servicies.inpl;
 
+import com.example.pincommunity.exceptions.PictureNotFoundException;
 import com.example.pincommunity.models.Picture;
 import com.example.pincommunity.repositories.PictureRepository;
 import com.example.pincommunity.servicies.FileHandler;
@@ -37,23 +38,32 @@ public class PictureServiceImpl implements ImageService<Picture> {
         picture.setPreview(preview);
 
         Picture savedPicture = pictureRepository.save(picture);//here I need get ID, for creating url and then write it into DB
-        savedPicture.setPictureUrl(String.format("/pictures/%s" + savedPicture.getId()));
+        savedPicture.setPictureUrl(String.format("/pictures/preview/%s" + savedPicture.getId()));
         log.info("Picture was saved");
         return pictureRepository.save(savedPicture);
     }
 
     @Override
     public ResponseEntity<Picture> getImageById(Long id) {
-        return null;
+        Picture picture = pictureRepository.findById(id).orElseThrow(() -> new PictureNotFoundException("Picture doesn't exist. PictureServiceImpl method getImageById"));
+        log.info("get picture by id");
+        return ResponseEntity.ok(picture);
     }
 
     @Override
     public Picture updateImage(Picture image, MultipartFile file) {
-        return null;
+        String filePathInFolder = image.getFilePathInFolder();
+        FileHandler.overwritesFileInFolder(file, filePathInFolder);
+        byte[] preview = FileHandler.generatePreview(filePathInFolder);
+        image.setPreview(preview);
+        return pictureRepository.save(image);
     }
 
-    @Override
+    @Override//нужен ли этот метод?
     public ResponseEntity<Void> deleteImageById(Long id) {
-        return null;
+        pictureRepository.findById(id).orElseThrow(() -> new PictureNotFoundException("Picture doesn't exist. PictureServiceImpl method deleteImageById"));
+        pictureRepository.deleteById(id);
+        log.info("Picture was deleted");
+        return ResponseEntity.ok().build();
     }
 }
