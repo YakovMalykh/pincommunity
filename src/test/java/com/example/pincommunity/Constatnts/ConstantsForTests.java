@@ -1,5 +1,7 @@
 package com.example.pincommunity.Constatnts;
 
+import com.example.pincommunity.dto.ClubDto;
+import com.example.pincommunity.dto.CreateClubDto;
 import com.example.pincommunity.dto.CreateMemberDto;
 import com.example.pincommunity.dto.MemberDto;
 import com.example.pincommunity.models.Avatar;
@@ -23,7 +25,8 @@ public class ConstantsForTests {
     public static final CreateMemberDto CREATE_MEMBER_DTO = new CreateMemberDto();
     public static final Member MEMBER = new Member();
     public static final Member MEMBER_2 = new Member();
-
+    public static final ClubDto CLUB_DTO=new ClubDto();
+    public static final CreateClubDto CREATE_CLUB_DTO=new CreateClubDto();
     public static final MemberDto MEMBER_DTO = new MemberDto();
     public static final MemberDto MEMBER_DTO_2 = new MemberDto();
     public static final Club CLUB = new Club();
