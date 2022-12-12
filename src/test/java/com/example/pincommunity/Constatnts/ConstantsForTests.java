@@ -7,6 +7,7 @@ import com.example.pincommunity.models.Club;
 import com.example.pincommunity.models.Member;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -111,6 +112,43 @@ public class ConstantsForTests {
         @Override
         public String getName() {
             return "test";
+        }
+    };
+
+    public static final UserDetails USER_DETAILS = new UserDetails() {
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return null;
+        }
+
+        @Override
+        public String getPassword() {
+            return ENCODED_PASSWORD;
+        }
+
+        @Override
+        public String getUsername() {
+            return null;
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+            return false;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return false;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return false;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
         }
     };
 
