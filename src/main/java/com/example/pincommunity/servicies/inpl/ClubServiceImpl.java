@@ -1,25 +1,72 @@
 package com.example.pincommunity.servicies.inpl;
 
+import com.example.pincommunity.constants.Role;
 import com.example.pincommunity.dto.ClubDto;
 import com.example.pincommunity.dto.CreateClubDto;
+import com.example.pincommunity.exceptions.ClubAlreadyExists;
+import com.example.pincommunity.exceptions.ClubNotFoundException;
+import com.example.pincommunity.mappers.ClubMapper;
+import com.example.pincommunity.models.Club;
+import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.ClubRepository;
+import com.example.pincommunity.repositories.MemberRepository;
 import com.example.pincommunity.servicies.ClubService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
+@Slf4j
+@Transactional
+@Service
+@RequiredArgsConstructor
 public class ClubServiceImpl implements ClubService {
-    private final ClubRepository clubRepository;
 
-    public ClubServiceImpl(ClubRepository clubRepository) {
-        this.clubRepository = clubRepository;
-    }
+    private final ClubRepository clubRepository;
+    private final MemberRepository memberRepository;
+    private final ClubMapper clubMapper;
 
     @Override
     public ResponseEntity<ClubDto> createClub(CreateClubDto createClubDto) {
-        return null;
+        if (clubRepository.findByCityIgnoreCase(createClubDto.getCity()).isPresent()) {
+            throw new ClubAlreadyExists("club already exists. ClubServiceImpl, method createClub");
+        }
+        Club club = clubMapper.createClubDtoToClub(createClubDto);
+        Club savedClub = clubRepository.save(club);
+        Member member = savedClub.getAdmin();
+        setClubAndAdminRoleForMemberAndSaveInDbAfterThat(savedClub, member);
+        ClubDto clubDto = clubMapper.clubToClubDto(savedClub);
+        return ResponseEntity.ok(clubDto);
     }
 
+    private void setClubAndAdminRoleForMemberAndSaveInDbAfterThat(Club club, Member member) {
+        member.setCurrentClub(club);
+        member.setRole(Role.ADMIN.name());
+        log.info("for " + member.getUsername() + " was set role ADMIN and currentClub");
+        memberRepository.save(member);
+    }
+
+
     @Override
-    public ResponseEntity<ClubDto> updateClub(Long id, CreateClubDto createClubDto) {
-        return null;
+    public ResponseEntity<ClubDto> updateClub(Long id, ClubDto clubDto) {
+        Club club = clubRepository.findById(id).orElseThrow(() -> new ClubNotFoundException("Club doesn't exists. ClubServiceImpl, method updateClub"));
+        Member adminBeforeChanges = club.getAdmin();
+        changeRoleOfMember(adminBeforeChanges);
+
+        clubMapper.updateClubFromClubDto(clubDto, club);
+        Club savedClub = clubRepository.save(club);
+        Member member = savedClub.getAdmin();
+        setClubAndAdminRoleForMemberAndSaveInDbAfterThat(savedClub, member);
+        ClubDto updatedClubDto = clubMapper.clubToClubDto(savedClub);
+        log.info("Admin of club: " + club.getCity() + " was changed. New admin: " + member.getUsername());
+        return ResponseEntity.ok(updatedClubDto);
+    }
+
+    private void changeRoleOfMember(Member member) {
+        member.setRole(Role.USER.name());
+        log.info("member: "+member.getUsername()+" was set role USER");
+        memberRepository.save(member);
     }
 }

@@ -25,6 +25,7 @@ public class AuthController {
 
     @Operation(description = "Login", responses = {
             @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "invalid data"),
             @ApiResponse(responseCode = "403", description = "forbidden")})
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto) {
@@ -36,9 +37,9 @@ public class AuthController {
     }
     @Operation(description = "Registration", responses = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "member already exists")})
+            @ApiResponse(responseCode = "400", description = "member already exists, or invalid data")})
     @PostMapping("/registration")
-    public ResponseEntity<?> registration(@RequestBody CreateMemberDto createMemberDto) {
+    public ResponseEntity<?> registration(@Valid @RequestBody CreateMemberDto createMemberDto) {
         if (authService.registration(createMemberDto)) {
             return ResponseEntity.ok().build();
         } else {

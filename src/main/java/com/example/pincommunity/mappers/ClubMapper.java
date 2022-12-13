@@ -6,14 +6,18 @@ import com.example.pincommunity.exceptions.MemberNotFoundException;
 import com.example.pincommunity.models.Club;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
+@Slf4j
 @Mapper
 public abstract class ClubMapper {
     @Autowired
     protected MemberRepository memberRepository;
 
+    /**
+     * @throws MemberNotFoundException status 404
+     */
     @Mapping(target = "admin", source = "adminUsername")
     public abstract Club createClubDtoToClub(CreateClubDto createClubDto);
 
@@ -21,9 +25,14 @@ public abstract class ClubMapper {
         return memberRepository.getMemberByUsernameIgnoreCase(admin).orElseThrow(() ->
                 new MemberNotFoundException("Member with username: " + admin + " doesn't exist. See ClubMapper.class, stringToMember method")
         );
+
     }
 
+    /**
+     * @throws MemberNotFoundException status 404
+     */
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "city", ignore = true)
     @Mapping(target = "admin", source = "adminUsername")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateClubFromClubDto(ClubDto clubDto, @MappingTarget Club club);
