@@ -43,8 +43,7 @@ public class MemberController {
     })
     @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateAvatar(@PathVariable Long id, @RequestPart MultipartFile file) {
-        memberService.updateAvatar(id, file);
-        return ResponseEntity.ok().build();
+        return memberService.updateAvatar(id, file);
     }
 
     @Operation(summary = "getting current member", responses = {

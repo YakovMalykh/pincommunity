@@ -6,27 +6,39 @@ import com.example.pincommunity.dto.CreateClubDto;
 import com.example.pincommunity.exceptions.ClubAlreadyExists;
 import com.example.pincommunity.exceptions.ClubNotFoundException;
 import com.example.pincommunity.mappers.ClubMapper;
+import com.example.pincommunity.models.Avatar;
 import com.example.pincommunity.models.Club;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.ClubRepository;
 import com.example.pincommunity.repositories.MemberRepository;
 import com.example.pincommunity.servicies.ClubService;
-import lombok.RequiredArgsConstructor;
+import com.example.pincommunity.servicies.ImageService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 
 @Slf4j
 @Transactional
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ClubServiceImpl implements ClubService {
 
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ClubMapper clubMapper;
+    @Qualifier("AvatarServiceImpl")
+    private final ImageService<Avatar> avatarService;
+
+    public ClubServiceImpl(ClubRepository clubRepository, MemberRepository memberRepository, ClubMapper clubMapper, ImageService<Avatar> avatarService) {
+        this.clubRepository = clubRepository;
+        this.memberRepository = memberRepository;
+        this.clubMapper = clubMapper;
+        this.avatarService = avatarService;
+    }
 
     @Override
     public ResponseEntity<ClubDto> createClub(CreateClubDto createClubDto) {
@@ -66,7 +78,36 @@ public class ClubServiceImpl implements ClubService {
 
     private void changeRoleOfMember(Member member) {
         member.setRole(Role.USER.name());
-        log.info("member: "+member.getUsername()+" was set role USER");
+        log.info("member: " + member.getUsername() + " was set role USER");
         memberRepository.save(member);
+    }
+
+    @Override
+    public ResponseEntity<Void> updateClubAvatar(Long id, MultipartFile file) {
+        Club club = clubRepository.findById(id).orElseThrow(() ->
+                new ClubNotFoundException("Club wasn't found. ClubServiceImpl, method updateClubAvatar"));
+        if (club.getClubAvatar() == null) {
+            log.info("Club " + club.getId() + " don't have any avatar");
+            Avatar avatar = new Avatar();
+            Avatar savedAvatar = avatarService.saveImage(file, club.getCity(), avatar);
+            club.setClubAvatar(savedAvatar);
+            clubRepository.save(club);
+            log.info("new Avatar is installed to Club: " + club.getCity());
+            return ResponseEntity.ok().build();
+        } else {
+            Avatar updatedAvatar = avatarService.updateImage(club.getClubAvatar(), file);
+            club.setClubAvatar(updatedAvatar);
+            log.info("Avatar of club: " + club.getCity() + ", has been update");
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<ClubDto> getClubById(Long id) {
+        Club club = clubRepository.findById(id).orElseThrow(() ->
+                new ClubNotFoundException("Club doesn't exist. ClubServiceImpl, method getClubById"));
+        ClubDto clubDto = clubMapper.clubToClubDto(club);
+        log.info("get club " + clubDto.getCity());
+        return ResponseEntity.ok(clubDto);
     }
 }

@@ -16,8 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.example.pincommunity.Constatnts.ConstantsForTests.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -33,6 +32,8 @@ public class ClubMapperTest {
         MEMBER.setId(1L);
         MEMBER.setUsername(EMAIL);
 
+        AVATAR.setAvatarUrl(TEST_URL);
+
         CREATE_CLUB_DTO.setCity(CLUB_CITY);
         CREATE_CLUB_DTO.setAdminUsername(EMAIL);
 
@@ -40,7 +41,7 @@ public class ClubMapperTest {
 
         CLUB.setAdmin(MEMBER);
         CLUB.setCity(CLUB_CITY);
-
+        CLUB.setClubAvatar(AVATAR);
 
     }
 
@@ -62,6 +63,7 @@ public class ClubMapperTest {
         ClubDto clubDto = clubMapper.clubToClubDto(CLUB);
         assertEquals(CLUB.getAdmin().getUsername(), clubDto.getAdminUsername());
         assertEquals(CLUB.getCity(), clubDto.getCity());
+        assertEquals(TEST_URL, clubDto.getClubAvatarUrl());
     }
 
     @Test

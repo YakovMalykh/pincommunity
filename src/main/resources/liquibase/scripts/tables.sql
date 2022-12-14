@@ -71,3 +71,7 @@ ALTER TABLE clubs ADD COLUMN clubs_admin BIGINT REFERENCES members (id);
 -- changeset ymalykh:3
 ALTER  TABLE avatars ADD COLUMN url VARCHAR(255);
 ALTER  TABLE pictures ADD COLUMN url VARCHAR(255);
+
+-- changeset ymalykh:4
+ALTER TABLE clubs ADD COLUMN avatar_id BIGINT REFERENCES avatars (id);
+

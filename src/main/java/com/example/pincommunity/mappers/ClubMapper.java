@@ -3,12 +3,14 @@ package com.example.pincommunity.mappers;
 import com.example.pincommunity.dto.ClubDto;
 import com.example.pincommunity.dto.CreateClubDto;
 import com.example.pincommunity.exceptions.MemberNotFoundException;
+import com.example.pincommunity.models.Avatar;
 import com.example.pincommunity.models.Club;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
 @Slf4j
 @Mapper
 public abstract class ClubMapper {
@@ -33,6 +35,7 @@ public abstract class ClubMapper {
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "city", ignore = true)
+    @Mapping(target = "clubAvatar", ignore = true)
     @Mapping(target = "admin", source = "adminUsername")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateClubFromClubDto(ClubDto clubDto, @MappingTarget Club club);
@@ -42,6 +45,14 @@ public abstract class ClubMapper {
     }
 
     @Mapping(target = "adminUsername", source = "admin")
+    @Mapping(target = "clubAvatarUrl", source = "clubAvatar")
     public abstract ClubDto clubToClubDto(Club club);
+
+    public String avatarToString(Avatar avatar) {
+        if (avatar != null) {
+            return avatar.getAvatarUrl();
+        }
+        return null;
+    }
 
 }
