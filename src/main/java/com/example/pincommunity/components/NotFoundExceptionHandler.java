@@ -1,9 +1,6 @@
 package com.example.pincommunity.components;
 
-import com.example.pincommunity.exceptions.AvatarNotFoundException;
-import com.example.pincommunity.exceptions.ClubNotFoundException;
-import com.example.pincommunity.exceptions.MemberNotFoundException;
-import com.example.pincommunity.exceptions.PictureNotFoundException;
+import com.example.pincommunity.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,4 +44,9 @@ public class NotFoundExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(PinsetNotFoundException.class)
+    public ResponseEntity<Object> handlerPinsetException(Exception exception) {
+        log.info(exception.getMessage());
+        return new ResponseEntity<>("Pinset not found", new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
 }

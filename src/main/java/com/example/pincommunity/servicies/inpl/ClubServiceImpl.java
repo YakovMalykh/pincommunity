@@ -95,8 +95,7 @@ public class ClubServiceImpl implements ClubService {
             log.info("new Avatar is installed to Club: " + club.getCity());
             return ResponseEntity.ok().build();
         } else {
-            Avatar updatedAvatar = avatarService.updateImage(club.getClubAvatar(), file);
-            club.setClubAvatar(updatedAvatar);
+            avatarService.updateImage(club.getClubAvatar(), file);
             log.info("Avatar of club: " + club.getCity() + ", has been update");
             return ResponseEntity.ok().build();
         }
