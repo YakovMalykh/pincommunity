@@ -20,6 +20,9 @@ public class Club {
     @OneToOne
     @JoinColumn(name = "clubs_admin")
     private Member admin;
+    @OneToOne
+    @JoinColumn(name = "avatar_id")
+    private Avatar clubAvatar;
 
 //    @OneToMany(mappedBy = "currentClub")
 //    private List<Member> members;

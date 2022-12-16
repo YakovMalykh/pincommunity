@@ -38,6 +38,6 @@ class PictureServiceImplTest {
 
         PictureNotFoundException exception = assertThrows(PictureNotFoundException.class, () -> pictureService.getImageById(anyLong()));
 
-        assertEquals("Picture doesn't exist. PictureServiceImpl method getImageById", exception.getMessage());
+        assertEquals("Picture doesn't exist", exception.getMessage());
     }
 }

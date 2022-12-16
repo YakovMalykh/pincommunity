@@ -1,9 +1,6 @@
 package com.example.pincommunity.components;
 
-import com.example.pincommunity.exceptions.AvatarNotFoundException;
-import com.example.pincommunity.exceptions.ClubNotFoundException;
-import com.example.pincommunity.exceptions.MemberNotFoundException;
-import com.example.pincommunity.exceptions.PictureNotFoundException;
+import com.example.pincommunity.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,33 +15,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class NotFoundExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ClubNotFoundException.class)
-    public ResponseEntity<Object> handleClubException(Exception exception) {
-//        exception.printStackTrace();
-        log.info(exception.getMessage());
-        return new ResponseEntity<>("there is no club in this city", new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(MemberNotFoundException.class)
-    public ResponseEntity<Object> handlerMemberException(Exception exception) {
-        log.info(exception.getMessage());
-        return new ResponseEntity<>("no such member found", new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(AvatarNotFoundException.class)
-    public ResponseEntity<Object> handlerAvatarException(Exception exception) {
-        log.info(exception.getMessage());
-        return new ResponseEntity<>("avatar not found", new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-    @ExceptionHandler(PictureNotFoundException.class)
-    public ResponseEntity<Object> handlerPictureException(Exception exception) {
-        log.info(exception.getMessage());
-        return new ResponseEntity<>("Picture not found", new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<Object> handlerUsernameException(Exception exception) {
-        log.info(exception.getMessage());
+    @ExceptionHandler({
+            ClubNotFoundException.class, MemberNotFoundException.class, AvatarNotFoundException.class,
+            PictureNotFoundException.class, UsernameNotFoundException.class, PinsetNotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundException(Exception exception) {
         return new ResponseEntity<>(exception.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
-
 }

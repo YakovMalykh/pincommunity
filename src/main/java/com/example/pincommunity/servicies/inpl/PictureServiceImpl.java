@@ -45,7 +45,10 @@ public class PictureServiceImpl implements ImageService<Picture> {
 
     @Override
     public ResponseEntity<Picture> getImageById(Long id) {
-        Picture picture = pictureRepository.findById(id).orElseThrow(() -> new PictureNotFoundException("Picture doesn't exist. PictureServiceImpl method getImageById"));
+        Picture picture = pictureRepository.findById(id).orElseThrow(() -> {
+            log.info("Picture doesn't exist. PictureServiceImpl method getImageById");
+            throw new PictureNotFoundException("Picture doesn't exist");
+        });
         log.info("get picture by id");
         return ResponseEntity.ok(picture);
     }
@@ -61,7 +64,10 @@ public class PictureServiceImpl implements ImageService<Picture> {
 
     @Override//нужен ли этот метод?
     public ResponseEntity<Void> deleteImageById(Long id) {
-        pictureRepository.findById(id).orElseThrow(() -> new PictureNotFoundException("Picture doesn't exist. PictureServiceImpl method deleteImageById"));
+        pictureRepository.findById(id).orElseThrow(() -> {
+            log.info("Picture doesn't exist. PictureServiceImpl method deleteImageById");
+            throw new PictureNotFoundException("Picture doesn't exist");
+        });
         pictureRepository.deleteById(id);
         log.info("Picture was deleted");
         return ResponseEntity.ok().build();

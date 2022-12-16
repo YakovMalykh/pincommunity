@@ -1,13 +1,7 @@
 package com.example.pincommunity.Constatnts;
 
-import com.example.pincommunity.dto.ClubDto;
-import com.example.pincommunity.dto.CreateClubDto;
-import com.example.pincommunity.dto.CreateMemberDto;
-import com.example.pincommunity.dto.MemberDto;
-import com.example.pincommunity.models.Avatar;
-import com.example.pincommunity.models.Club;
-import com.example.pincommunity.models.Member;
-import com.example.pincommunity.models.Picture;
+import com.example.pincommunity.dto.*;
+import com.example.pincommunity.models.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,8 +19,8 @@ public class ConstantsForTests {
     public static final CreateMemberDto CREATE_MEMBER_DTO = new CreateMemberDto();
     public static final Member MEMBER = new Member();
     public static final Member MEMBER_2 = new Member();
-    public static final ClubDto CLUB_DTO=new ClubDto();
-    public static final CreateClubDto CREATE_CLUB_DTO=new CreateClubDto();
+    public static final ClubDto CLUB_DTO = new ClubDto();
+    public static final CreateClubDto CREATE_CLUB_DTO = new CreateClubDto();
     public static final MemberDto MEMBER_DTO = new MemberDto();
     public static final MemberDto MEMBER_DTO_2 = new MemberDto();
     public static final Club CLUB = new Club();
@@ -41,6 +35,12 @@ public class ConstantsForTests {
     public static final String DATE = "10-12-2000";
     public static final LocalDate TEST_DATE = LocalDate.parse(DATE, DateTimeFormatter.ofPattern(DATE_FORMAT));
     public static final String TEST_URL = "test url";
+
+    public static final CreatePinsetDto CREATE_PINSET_DTO = new CreatePinsetDto();
+    public static final PinsetDto PINSET_DTO = new PinsetDto();
+    public static final Pinset PINSET = new Pinset();
+
+
 
     public static final MultipartFile FILE = new MultipartFile() {
         @Override
