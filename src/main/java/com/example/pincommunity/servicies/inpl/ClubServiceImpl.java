@@ -84,8 +84,10 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public ResponseEntity<Void> updateClubAvatar(Long id, MultipartFile file) {
-        Club club = clubRepository.findById(id).orElseThrow(() ->
-                new ClubNotFoundException("Club wasn't found. ClubServiceImpl, method updateClubAvatar"));
+        Club club = clubRepository.findById(id).orElseThrow(() -> {
+            log.info("Club wasn't found. ClubServiceImpl, method updateClubAvatar");
+            return new ClubNotFoundException("Club wasn't found.");
+        });
         if (club.getClubAvatar() == null) {
             log.info("Club " + club.getId() + " don't have any avatar");
             Avatar avatar = new Avatar();

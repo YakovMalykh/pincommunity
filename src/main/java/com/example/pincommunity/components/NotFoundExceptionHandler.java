@@ -19,7 +19,7 @@ public class NotFoundExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleClubException(Exception exception) {
 //        exception.printStackTrace();
         log.info(exception.getMessage());
-        return new ResponseEntity<>("there is no club in this city", new HttpHeaders(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exception.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MemberNotFoundException.class)
