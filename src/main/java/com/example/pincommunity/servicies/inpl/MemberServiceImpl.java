@@ -53,7 +53,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResponseEntity<MemberDto> updateMember(Long id, MemberDto memberDto) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist. MemberServiceImpl.class, method updateMember"));
+        Member member = memberRepository.findById(id).orElseThrow(() -> {
+            log.info("Member doesn't exist. MemberServiceImpl.class, method updateMember");
+            throw new MemberNotFoundException("Member doesn't exist");
+        });
         memberMapper.updateMemberFromMemberDto(memberDto, member);
         Member updatedMember = memberRepository.save(member);
         MemberDto updatedMemberDto = memberMapper.memberToMemberDto(updatedMember);
@@ -63,7 +66,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResponseEntity<Void> updateAvatar(Long id, MultipartFile file) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist. MemberServiceImpl.class, method updateAvatar"));
+        Member member = memberRepository.findById(id).orElseThrow(() -> {
+            log.info("Member doesn't exist. MemberServiceImpl.class, method updateAvatar");
+            throw new MemberNotFoundException("Member doesn't exist");
+        });
         if (member.getAvatar() == null) {
             log.info("Member " + member.getId() + " don't have any avatar");
             Avatar avatar = new Avatar();
@@ -82,8 +88,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResponseEntity<MemberDto> getMemberMe(Authentication authentication) {
-        Member member = memberRepository.getMemberByUsernameIgnoreCase(authentication.getName()).orElseThrow(() ->
-                new MemberNotFoundException("Member wasn't found. MemberServiceImpl.class, method getMemberMe"));
+        Member member = memberRepository.getMemberByUsernameIgnoreCase(authentication.getName()).orElseThrow(() -> {
+            log.info("Member wasn't found. MemberServiceImpl.class, method getMemberMe");
+            throw new MemberNotFoundException("Member wasn't found");
+        });
         MemberDto memberDto = memberMapper.memberToMemberDto(member);
         log.info("Member " + authentication.getName() + " has been gotten");
         return ResponseEntity.ok(memberDto);

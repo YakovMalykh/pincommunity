@@ -14,7 +14,6 @@ public class AlreadyExistsExceptionHandler {
 
     @ExceptionHandler(ClubAlreadyExists.class)
     public ResponseEntity<Object> handlerClubAlreadyExists(Exception exception) {
-        log.info(exception.getMessage());
-        return new ResponseEntity<>("Club already exists", new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exception.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }

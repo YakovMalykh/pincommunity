@@ -53,16 +53,20 @@ public class PinsetServiceImpl implements PinsetService {
 
     @Override
     public ResponseEntity<PinsetDto> getPinsetById(Long id) {
-        Pinset pinset = pinsetRepository.findById(id).orElseThrow(() ->
-                new PinsetNotFoundException("Pinset by id " + id + " not found. PinsetServiceImpl, method getPinsetById"));
+        Pinset pinset = pinsetRepository.findById(id).orElseThrow(() -> {
+            log.info("Pinset by id " + id + " not found. PinsetServiceImpl, method getPinsetById");
+            throw new PinsetNotFoundException("Pinset by id " + id + " not found");
+        });
         PinsetDto pinsetDto = pinsetMapper.pinsetToPinsetDto(pinset);
         return ResponseEntity.ok(pinsetDto);
     }
 
     @Override
     public ResponseEntity<PinsetDto> updatePinset(Long id, CreatePinsetDto createPinsetDto) {
-        Pinset pinset = pinsetRepository.findById(id).orElseThrow(() ->
-                new PinsetNotFoundException("Pinset by id " + id + " not found. PinsetServiceImpl, method updatePinset"));
+        Pinset pinset = pinsetRepository.findById(id).orElseThrow(() -> {
+            log.info("Pinset by id " + id + " not found. PinsetServiceImpl, method updatePinset");
+            throw new PinsetNotFoundException("Pinset by id " + id + " not found");
+        });
         pinsetMapper.updatePinsetFromCreatePinsetDto(createPinsetDto, pinset);
         Pinset savedPinset = pinsetRepository.save(pinset);
         PinsetDto pinsetDto = pinsetMapper.pinsetToPinsetDto(savedPinset);
@@ -71,8 +75,10 @@ public class PinsetServiceImpl implements PinsetService {
 
     @Override
     public ResponseEntity<Void> updatePictureOfPinset(Long id, MultipartFile file) {
-        Pinset pinset = pinsetRepository.findById(id).orElseThrow(() ->
-                new PinsetNotFoundException("Pinset by id " + id + " not found. PinsetServiceImpl, method updatePictureOfPinset"));
+        Pinset pinset = pinsetRepository.findById(id).orElseThrow(() -> {
+            log.info("Pinset by id " + id + " not found. PinsetServiceImpl, method updatePictureOfPinset");
+            throw new PinsetNotFoundException("Pinset by id " + id + " not found");
+        });
         pictureService.updateImage(pinset.getPinsetPictureId(), file);
         return ResponseEntity.ok().build();
     }
@@ -84,8 +90,10 @@ public class PinsetServiceImpl implements PinsetService {
 
     @Override
     public ResponseEntity<ResponseWrapperPinDto> getAllPinsOfThisPinset(Long pinsetId) {
-        Pinset pinset = pinsetRepository.findById(pinsetId).orElseThrow(() ->
-                new PinsetNotFoundException("Pinset by id " + pinsetId + " not found. PinsetServiceImpl, method getAllPinsOfThisPinset"));
+        Pinset pinset = pinsetRepository.findById(pinsetId).orElseThrow(() -> {
+            log.info("Pinset by id " + pinsetId + " not found. PinsetServiceImpl, method getAllPinsOfThisPinset");
+            throw new PinsetNotFoundException("Pinset by id " + pinsetId + " not found");
+        });
         List<Pin> associatedPins = pinset.getAssociatedPins();
         return null;
     }

@@ -72,7 +72,7 @@ class MemberServiceTest {
 
         MemberNotFoundException exception = assertThrows(
                 MemberNotFoundException.class, () -> memberService.updateAvatar(1L, FILE));
-        assertEquals("Member doesn't exist. MemberServiceImpl.class, method updateAvatar", exception.getMessage());
+        assertEquals("Member doesn't exist", exception.getMessage());
     }
 
     @Test
@@ -92,7 +92,7 @@ class MemberServiceTest {
 
         MemberNotFoundException exception = assertThrows(
                 MemberNotFoundException.class, () -> memberService.updateMember(1L, MEMBER_DTO));
-        assertEquals("Member doesn't exist. MemberServiceImpl.class, method updateMember", exception.getMessage());
+        assertEquals("Member doesn't exist", exception.getMessage());
 
     }
 
@@ -113,6 +113,6 @@ class MemberServiceTest {
         MemberNotFoundException exception = assertThrows(
                 MemberNotFoundException.class, () -> memberService.getMemberMe(AUTHENTICATION));
 
-        assertEquals("Member wasn't found. MemberServiceImpl.class, method getMemberMe", exception.getMessage());
+        assertEquals("Member wasn't found", exception.getMessage());
     }
 }

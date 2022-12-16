@@ -50,7 +50,7 @@ class PinsetMapperTest {
         ClubNotFoundException exception = assertThrows(ClubNotFoundException.class, () ->
                 mapper.createPinsetDtoToPinset(CREATE_PINSET_DTO));
 
-        assertEquals("Club not found in city: " + CLUB_CITY + ". PinsetMapper, method stringToClub", exception.getMessage());
+        assertEquals("Club not found in city: " + CLUB_CITY, exception.getMessage());
     }
 
     @Test

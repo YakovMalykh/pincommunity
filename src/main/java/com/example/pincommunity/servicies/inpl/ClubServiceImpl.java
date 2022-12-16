@@ -43,7 +43,8 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public ResponseEntity<ClubDto> createClub(CreateClubDto createClubDto) {
         if (clubRepository.findByCityIgnoreCase(createClubDto.getCity()).isPresent()) {
-            throw new ClubAlreadyExists("club already exists. ClubServiceImpl, method createClub");
+            log.info("club already exists. ClubServiceImpl, method createClub");
+            throw new ClubAlreadyExists("club already exists");
         }
         Club club = clubMapper.createClubDtoToClub(createClubDto);
         Club savedClub = clubRepository.save(club);
@@ -63,7 +64,10 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public ResponseEntity<ClubDto> updateClub(Long id, ClubDto clubDto) {
-        Club club = clubRepository.findById(id).orElseThrow(() -> new ClubNotFoundException("Club doesn't exists. ClubServiceImpl, method updateClub"));
+        Club club = clubRepository.findById(id).orElseThrow(() -> {
+            log.info("Club doesn't exists. ClubServiceImpl, method updateClub");
+            throw new ClubNotFoundException("Club doesn't exists");
+        });
         Member adminBeforeChanges = club.getAdmin();
         changeRoleOfMember(adminBeforeChanges);
 
@@ -86,7 +90,7 @@ public class ClubServiceImpl implements ClubService {
     public ResponseEntity<Void> updateClubAvatar(Long id, MultipartFile file) {
         Club club = clubRepository.findById(id).orElseThrow(() -> {
             log.info("Club wasn't found. ClubServiceImpl, method updateClubAvatar");
-            return new ClubNotFoundException("Club wasn't found.");
+            throw new ClubNotFoundException("Club wasn't found.");
         });
         if (club.getClubAvatar() == null) {
             log.info("Club " + club.getId() + " don't have any avatar");
@@ -105,8 +109,10 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public ResponseEntity<ClubDto> getClubById(Long id) {
-        Club club = clubRepository.findById(id).orElseThrow(() ->
-                new ClubNotFoundException("Club doesn't exist. ClubServiceImpl, method getClubById"));
+        Club club = clubRepository.findById(id).orElseThrow(() -> {
+            log.info("Club doesn't exist. ClubServiceImpl, method getClubById");
+            throw new ClubNotFoundException("Club doesn't exist");
+        });
         ClubDto clubDto = clubMapper.clubToClubDto(club);
         log.info("get club " + clubDto.getCity());
         return ResponseEntity.ok(clubDto);

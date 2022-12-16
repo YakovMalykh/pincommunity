@@ -25,8 +25,10 @@ public abstract class PinsetMapper {
     public abstract Pinset createPinsetDtoToPinset(CreatePinsetDto createPinsetDto);
 
     public Club stringToClub(String clubCity) {
-        return clubRepository.findByCityIgnoreCase(clubCity).orElseThrow(() ->
-                new ClubNotFoundException("Club not found in city: " + clubCity + ". PinsetMapper, method stringToClub"));
+        return clubRepository.findByCityIgnoreCase(clubCity).orElseThrow(() -> {
+            log.info("Club not found in city: " + clubCity + ". PinsetMapper, method stringToClub");
+            throw new ClubNotFoundException("Club not found in city: " + clubCity);
+        });
     }
 
     @Mapping(target = "pictureUrl", source = "pinsetPictureId")

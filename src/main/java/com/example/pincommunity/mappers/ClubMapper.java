@@ -24,9 +24,10 @@ public abstract class ClubMapper {
     public abstract Club createClubDtoToClub(CreateClubDto createClubDto);
 
     public Member stringToMember(String admin) {
-        return memberRepository.getMemberByUsernameIgnoreCase(admin).orElseThrow(() ->
-                new MemberNotFoundException("Member with username: " + admin + " doesn't exist. See ClubMapper.class, stringToMember method")
-        );
+        return memberRepository.getMemberByUsernameIgnoreCase(admin).orElseThrow(() -> {
+            log.info("Member with username: " + admin + " doesn't exist. See ClubMapper.class, stringToMember method");
+            throw new MemberNotFoundException("Member with username: " + admin + " doesn't exist.");
+        });
 
     }
 

@@ -7,9 +7,10 @@ import com.example.pincommunity.models.Avatar;
 import com.example.pincommunity.models.Club;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.repositories.ClubRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
+@Slf4j
 @Mapper
 public abstract class MemberMapper {
     @Autowired
@@ -26,8 +27,10 @@ public abstract class MemberMapper {
     public abstract void updateMemberFromMemberDto(MemberDto memberDto, @MappingTarget Member member);
 
     public Club stringToClub(String clubCity) {
-        return clubRepository.findByCityIgnoreCase(clubCity).orElseThrow(() ->
-                new ClubNotFoundException("Club with city: " + clubCity + " doesn't exist. See MemberMapper.class, stringToClub method"));
+        return clubRepository.findByCityIgnoreCase(clubCity).orElseThrow(() -> {
+            log.info("Club with city: " + clubCity + " doesn't exist. See MemberMapper.class, stringToClub method");
+            throw new ClubNotFoundException("Club with city: " + clubCity + " doesn't exist");
+        });
     }
 
     @Mapping(target = "email", source = "username")
