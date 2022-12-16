@@ -18,7 +18,7 @@ public class NotFoundExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
             ClubNotFoundException.class, MemberNotFoundException.class, AvatarNotFoundException.class,
             PictureNotFoundException.class, UsernameNotFoundException.class, PinsetNotFoundException.class})
-    public ResponseEntity<Object> handleClubException(Exception exception) {
+    public ResponseEntity<Object> handleNotFoundException(Exception exception) {
         return new ResponseEntity<>(exception.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 }
