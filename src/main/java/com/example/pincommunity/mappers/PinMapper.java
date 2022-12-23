@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @Slf4j
 @Mapper
 public abstract class PinMapper {
@@ -36,16 +38,21 @@ public abstract class PinMapper {
     }
 
     public Pinset stringToPinset(String pinsetName) {
-        return pinsetRepository.findByPinsetNameIgnoreCase(pinsetName).orElseThrow(() -> {
-            log.info("Pinset with name: " + pinsetName + " doesn't exist. See PinMapper.class, stringToPinset method");
-            throw new MemberNotFoundException("Pinset with name: " + pinsetName + " doesn't exist.");
-        });
+        if (pinsetName != null) {
+            return pinsetRepository.findByPinsetNameIgnoreCase(pinsetName).orElseThrow(() -> {
+                log.info("Pinset with name: " + pinsetName + " doesn't exist. See PinMapper.class, stringToPinset method");
+                throw new MemberNotFoundException("Pinset with name: " + pinsetName + " doesn't exist.");
+            });
+        } else {
+            return null;
+        }
     }
+
     @Mapping(target = "pictureUrl", expression = "java(pin.getPicture().getPictureUrl())")
     @Mapping(target = "clubCity", expression = "java(pin.getOriginClub().getCity())")
-    @Mapping(target = "pinsetName", expression = "java(pin.getPinset().getPinsetName())")
+    @Mapping(target = "pinsetName",expression = "java(pin.getPinset()==null?null:pin.getPinset().getPinsetName())")
     @Mapping(target = "holdersUsername", expression = "java(pin.getHolder().getUsername())")
-    public abstract PinDto PinToPinDto(Pin pin);
+    public abstract PinDto pinToPinDto(Pin pin);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "picture", ignore = true)
@@ -54,5 +61,7 @@ public abstract class PinMapper {
     @Mapping(target = "pinset", source = "pinsetName")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updatePinFromCreatePinDto(CreatePinDto createPinDto, @MappingTarget Pin pin);
+
+    public abstract List<PinDto> listPinToListPinDto(List<Pin> adsList);
 
 }
