@@ -39,7 +39,8 @@ public class ConstantsForTests {
     public static final CreatePinsetDto CREATE_PINSET_DTO = new CreatePinsetDto();
     public static final PinsetDto PINSET_DTO = new PinsetDto();
     public static final Pinset PINSET = new Pinset();
-
+    public static final Pin PIN = new Pin();
+    public static final CreatePinDto CREATE_PIN_DTO = new CreatePinDto();
 
 
     public static final MultipartFile FILE = new MultipartFile() {
