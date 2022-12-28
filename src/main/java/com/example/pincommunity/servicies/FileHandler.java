@@ -110,4 +110,14 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
+
+    public static void removeFileFromFolder(String path) {
+        Path filePath = Path.of(path);
+        try {
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            log.info("something wrong with file");
+            e.printStackTrace();
+        }
+    }
 }

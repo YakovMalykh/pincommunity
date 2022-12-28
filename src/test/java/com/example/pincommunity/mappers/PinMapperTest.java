@@ -84,7 +84,7 @@ public class PinMapperTest {
 
     @Test
     void PinToPinDto_successfully() {
-        PinDto pinDto = pinMapper.PinToPinDto(PIN);
+        PinDto pinDto = pinMapper.pinToPinDto(PIN);
         assertEquals(CLUB_CITY, pinDto.getClubCity());
         assertEquals(TEST_DATE, pinDto.getReleaseDate());
         assertEquals("pinsetName", pinDto.getPinsetName());

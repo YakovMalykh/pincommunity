@@ -49,12 +49,17 @@ public class PinsetController {
     public ResponseEntity<PinsetDto> getPinsetById(@PathVariable Long id) {
         return pinsetService.getPinsetById(id);
     }
+    @Operation(summary = "remove pinset",
+              responses = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "404", description = "pinset not found")
 
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removePinsetById(@PathVariable Long id) {
         // при его вызове нужно затирать поле Pinset в Pin, но не удалять Pin
         // картинку нужно удалять из папки и из БД
-        return ResponseEntity.ok().build();
+        return pinsetService.removePinset(id);
     }
     @Operation(summary = "update pinset",
             responses = {

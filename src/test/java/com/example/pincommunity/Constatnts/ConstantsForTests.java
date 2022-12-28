@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class ConstantsForTests {
 
@@ -41,6 +43,11 @@ public class ConstantsForTests {
     public static final Pinset PINSET = new Pinset();
     public static final Pin PIN = new Pin();
     public static final CreatePinDto CREATE_PIN_DTO = new CreatePinDto();
+
+    public static final List<Pin> PIN_LIST = new ArrayList<>();
+    public static final List<PinDto> PIN_DTO_LIST = new ArrayList<>();
+
+    public static final ResponseWrapperPinDto RESPONSE_WRAPPER_PIN_DTO = new ResponseWrapperPinDto();
 
 
     public static final MultipartFile FILE = new MultipartFile() {

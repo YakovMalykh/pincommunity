@@ -1,9 +1,11 @@
 package com.example.pincommunity.servicies.inpl;
 
 import com.example.pincommunity.dto.CreatePinsetDto;
+import com.example.pincommunity.dto.PinDto;
 import com.example.pincommunity.dto.PinsetDto;
 import com.example.pincommunity.dto.ResponseWrapperPinDto;
 import com.example.pincommunity.exceptions.PinsetNotFoundException;
+import com.example.pincommunity.mappers.PinMapper;
 import com.example.pincommunity.mappers.PinsetMapper;
 import com.example.pincommunity.models.Picture;
 import com.example.pincommunity.models.Pin;
@@ -30,13 +32,16 @@ public class PinsetServiceImpl implements PinsetService {
     private final PinsetRepository pinsetRepository;
     private final PinRepository repoOfPins;
     private final PinsetMapper pinsetMapper;
+
+    private final PinMapper pinMapper;
     @Qualifier("PictureServiceImpl")
     private final ImageService<Picture> pictureService;
 
-    public PinsetServiceImpl(PinsetRepository pinsetRepository, PinRepository repoOfPins, PinsetMapper pinsetMapper, ImageService<Picture> pictureService) {
+    public PinsetServiceImpl(PinsetRepository pinsetRepository, PinRepository repoOfPins, PinsetMapper pinsetMapper, PinMapper pinMapper, ImageService<Picture> pictureService) {
         this.pinsetRepository = pinsetRepository;
         this.repoOfPins = repoOfPins;
         this.pinsetMapper = pinsetMapper;
+        this.pinMapper = pinMapper;
         this.pictureService = pictureService;
     }
 
@@ -85,7 +90,20 @@ public class PinsetServiceImpl implements PinsetService {
 
     @Override
     public ResponseEntity<Void> removePinset(Long id) {
-        return null;
+        Pinset pinset = pinsetRepository.findById(id).orElseThrow(() -> {
+            log.info("Pinset by id " + id + " not found. PinsetServiceImpl, method removePinset");
+            throw new PinsetNotFoundException("Pinset by id " + id + " not found");
+        });
+        Picture pinsetPicture = pinset.getPinsetPictureId();
+        if (pinsetPicture != null) {
+            pictureService.deleteImageById(pinsetPicture.getId());
+        }
+        List<Pin> associatedPins = pinset.getAssociatedPins();
+        if (!associatedPins.isEmpty()) {
+            associatedPins.forEach(e -> e.setPinset(null));
+        }
+        pinsetRepository.delete(pinset);
+        return ResponseEntity.ok().build();
     }
 
     @Override
@@ -95,6 +113,11 @@ public class PinsetServiceImpl implements PinsetService {
             throw new PinsetNotFoundException("Pinset by id " + pinsetId + " not found");
         });
         List<Pin> associatedPins = pinset.getAssociatedPins();
-        return null;
+        List<PinDto> pinDtoList = pinMapper.listPinToListPinDto(associatedPins);
+        ResponseWrapperPinDto responseWrapperPinDto = new ResponseWrapperPinDto();
+        responseWrapperPinDto.setCount((long) pinDtoList.size());
+        responseWrapperPinDto.setResult(pinDtoList);
+
+        return ResponseEntity.ok(responseWrapperPinDto);
     }
 }
