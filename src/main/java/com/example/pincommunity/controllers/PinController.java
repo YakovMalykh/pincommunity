@@ -14,13 +14,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/pins")
+
 public class PinController {
     private final PinService pinService;
 
@@ -35,7 +40,7 @@ public class PinController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<PinDto> createPin(@RequestPart("properties") CreatePinDto createPinDto, @RequestPart("image") MultipartFile file, Authentication auth) {
+    public ResponseEntity<PinDto> createPin(@Valid @RequestPart("properties") CreatePinDto createPinDto, @RequestPart("image") MultipartFile file, Authentication auth) {
         return pinService.createPin(createPinDto, file, auth);
     }
 
@@ -52,7 +57,6 @@ public class PinController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<PinDto> removePinById(@PathVariable Long id) {
-
         return pinService.removePinById(id);
     }
 
