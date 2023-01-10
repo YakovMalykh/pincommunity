@@ -55,16 +55,19 @@ public class PinController {
         return pinService.getPinById(id);
     }
 
+    @PreAuthorize("@pinServiceImpl.getPinById(#id).body.holdersUsername.equals(authentication.principal.username) or hasAuthority('ADMIN')or hasAuthority('SUPER_ADMIN') ")
     @DeleteMapping("/{id}")
     public ResponseEntity<PinDto> removePinById(@PathVariable Long id) {
         return pinService.removePinById(id);
     }
 
+    @PreAuthorize("@pinServiceImpl.getPinById(#id).body.holdersUsername.equals(authentication.principal.username) or hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN') ")
     @PatchMapping("/{id}")
     public ResponseEntity<PinDto> updatePin(@PathVariable Long id, @RequestBody CreatePinDto createPinDto) {
         return pinService.updatePin(id, createPinDto);
     }
 
+    @PreAuthorize("@pinServiceImpl.getPinById(#id).body.holdersUsername.equals(authentication.principal.username) or hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     @PatchMapping(value = "/{id}/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updatePictureOfPin(@PathVariable Long id, @RequestPart MultipartFile file) {
         return pinService.updatePictureOfPin(id, file);

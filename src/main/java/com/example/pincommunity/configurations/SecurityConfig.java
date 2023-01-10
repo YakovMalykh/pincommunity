@@ -22,6 +22,11 @@ public class SecurityConfig {
         this.userService = userService;
     }
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**","/swagger-ui.html", "/v3/api-docs",
+            "/pictures", "/pins","/pinsets",
+            "/members","/login", "/registration","/clubs", "/avatars/**"
+    };
     @Bean
     public PasswordEncoder passwordEncoder() {
        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -41,9 +46,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests(authorize -> authorize
-                        .mvcMatchers("/profile").hasAuthority("ADMIN")
-                        .mvcMatchers("/authenticated","/pin/**").authenticated()
-                        .mvcMatchers("/").permitAll()
+                        .mvcMatchers(AUTH_WHITELIST).permitAll()
                         .mvcMatchers("/registration").permitAll()
                 )
                 .cors().and()

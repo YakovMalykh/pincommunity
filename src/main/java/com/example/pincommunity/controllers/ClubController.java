@@ -20,6 +20,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/clubs")// к этому контроллеру доступ только у SUPER_ADMIN
+//Поччему? разве клубы не может посмотреть просто гость?
 public class ClubController {
 
     private final ClubService clubService;
