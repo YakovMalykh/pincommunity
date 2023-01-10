@@ -64,10 +64,11 @@ public class PictureServiceImpl implements ImageService<Picture> {
 
     @Override//нужен ли этот метод?
     public ResponseEntity<Void> deleteImageById(Long id) {
-        pictureRepository.findById(id).orElseThrow(() -> {
+        Picture picture = pictureRepository.findById(id).orElseThrow(() -> {
             log.info("Picture doesn't exist. PictureServiceImpl method deleteImageById");
             throw new PictureNotFoundException("Picture doesn't exist");
         });
+        FileHandler.removeFileFromFolder(picture.getFilePathInFolder());
         pictureRepository.deleteById(id);
         log.info("Picture was deleted");
         return ResponseEntity.ok().build();

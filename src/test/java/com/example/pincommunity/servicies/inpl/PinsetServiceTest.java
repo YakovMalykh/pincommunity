@@ -1,9 +1,13 @@
 package com.example.pincommunity.servicies.inpl;
 
+import com.example.pincommunity.dto.PinDto;
 import com.example.pincommunity.dto.PinsetDto;
+import com.example.pincommunity.dto.ResponseWrapperPinDto;
 import com.example.pincommunity.exceptions.PinsetNotFoundException;
+import com.example.pincommunity.mappers.PinMapper;
 import com.example.pincommunity.mappers.PinsetMapper;
 import com.example.pincommunity.models.Picture;
+import com.example.pincommunity.models.Pin;
 import com.example.pincommunity.models.Pinset;
 import com.example.pincommunity.repositories.PinsetRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +29,12 @@ import static org.mockito.Mockito.*;
 class PinsetServiceTest {
     @Mock
     PinsetRepository pinsetRepository;
-    @Mock
-    PinsetRepository repoOfPins;
+//    @Mock
+//    PinsetRepository repoOfPins;
     @Mock
     PinsetMapper pinsetMapper;
+    @Mock
+    PinMapper pinMapper;
     @Mock
     PictureServiceImpl pictureService;
     @InjectMocks
@@ -38,6 +44,13 @@ class PinsetServiceTest {
     void setUp() {
         PINSET.setPinsetName("name");
         PINSET.setId(1L);
+        PINSET.setAssociatedPins(PIN_LIST);
+
+        PIN_LIST.add(new Pin());
+        PIN_LIST.add(new Pin());
+
+        RESPONSE_WRAPPER_PIN_DTO.setCount(2L);
+        RESPONSE_WRAPPER_PIN_DTO.setResult(PIN_DTO_LIST);
     }
 
     @Test
@@ -109,11 +122,27 @@ class PinsetServiceTest {
         assertEquals(ResponseEntity.ok().build(), response);
     }
 
-    @Test
-    void removePinset() {
-    }
 
     @Test
-    void getAllPinsOfThisPinset() {
+    void getAllPinsOfThisPinset_shouldThrowPinsetNotFoundException() {
+        Long id = 1L;
+        when(pinsetRepository.findById(anyLong())).thenReturn(Optional.empty());
+        PinsetNotFoundException exception = assertThrows(PinsetNotFoundException.class, () ->
+                pinsetService.getAllPinsOfThisPinset(id));
+        assertEquals("Pinset by id " + id + " not found", exception.getMessage());
     }
+    @Test
+    void getAllPinsOfThisPinset_whenSuccessfully() {
+        Long id = 1L;
+        PIN_DTO_LIST.add(new PinDto());
+        PIN_DTO_LIST.add(new PinDto());
+
+        when(pinsetRepository.findById(anyLong())).thenReturn(Optional.of(PINSET));
+        when(pinMapper.listPinToListPinDto(anyList())).thenReturn(PIN_DTO_LIST);
+
+        ResponseEntity<ResponseWrapperPinDto> response = pinsetService.getAllPinsOfThisPinset(id);
+
+        assertEquals(ResponseEntity.ok(RESPONSE_WRAPPER_PIN_DTO), response);
+    }
+
 }
