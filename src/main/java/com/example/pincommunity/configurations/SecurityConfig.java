@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
                         .mvcMatchers("/registration").permitAll()
+                        .mvcMatchers("/members/**", "/pins/**").authenticated()
                 )
                 .cors().and()
 //                .formLogin(withDefaults())
