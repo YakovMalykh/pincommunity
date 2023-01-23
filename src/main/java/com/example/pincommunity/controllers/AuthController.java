@@ -9,13 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Slf4j
-@RestController
+@Controller
 @Validated
 @RequiredArgsConstructor
 //@EnableGlobalMethodSecurity(securedEnabled = true)
@@ -23,18 +24,35 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(description = "Login", responses = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "invalid data"),
-            @ApiResponse(responseCode = "403", description = "forbidden")})
+    @GetMapping("/login")
+    public String loginForm() {
+        log.info("method GET in progress");
+        return "login";
+    }
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto) {
+    public String login(@RequestBody LoginDto loginDto) {
+        log.info("method login in progress");
         if (authService.login(loginDto.getEmail(), loginDto.getPassword())) {
-            return ResponseEntity.ok().build();
+            return "redirect:/";
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build().toString();
         }
     }
+
+
+//    @Operation(description = "Login", responses = {
+//            @ApiResponse(responseCode = "200", description = "OK"),
+//            @ApiResponse(responseCode = "400", description = "invalid data"),
+//            @ApiResponse(responseCode = "403", description = "forbidden")})
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto) {
+//        if (authService.login(loginDto.getEmail(), loginDto.getPassword())) {
+//            return ResponseEntity.ok().build();
+//        } else {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
+//    }
+
     @Operation(description = "Registration", responses = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "member already exists, or invalid data")})
@@ -46,6 +64,5 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         }
     }
-
 
 }

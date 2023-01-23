@@ -22,6 +22,7 @@ public class SecurityConfig {
         this.userService = userService;
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -39,15 +40,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf().and()
                 .authorizeRequests(authorize -> authorize
-                        .mvcMatchers("/profile").hasAuthority("ADMIN")
-                        .mvcMatchers("/authenticated","/pin/**").authenticated()
-                        .mvcMatchers("/").permitAll()
-                        .mvcMatchers("/registration").permitAll()
+                        .mvcMatchers("/login","/registration","/swagger-ui/index.html").permitAll()
+                        .mvcMatchers("/**").authenticated()
+//                        .mvcMatchers("/").permitAll()
+//                        .mvcMatchers("/registration").permitAll()
                 )
                 .cors().and()
-//                .formLogin(withDefaults())
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .and()
                 .httpBasic(withDefaults());
         return http.build();
     }
