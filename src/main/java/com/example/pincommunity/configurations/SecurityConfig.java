@@ -50,7 +50,11 @@ public class SecurityConfig {
                 .cors().and()
                 .formLogin()
                 .loginPage("/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/", true)
+                .and()
+                .logout()
                 .and()
                 .httpBasic(withDefaults());
         return http.build();

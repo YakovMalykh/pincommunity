@@ -20,6 +20,7 @@ import javax.validation.Valid;
 @Validated
 @RequiredArgsConstructor
 //@EnableGlobalMethodSecurity(securedEnabled = true)
+@CrossOrigin(value = "http://localhost:8080")
 public class AuthController {
 
     private final AuthService authService;
@@ -29,15 +30,15 @@ public class AuthController {
         log.info("method GET in progress");
         return "login";
     }
-    @PostMapping("/login")
-    public String login(@RequestBody LoginDto loginDto) {
-        log.info("method login in progress");
-        if (authService.login(loginDto.getEmail(), loginDto.getPassword())) {
-            return "redirect:/";
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build().toString();
-        }
-    }
+//    @PostMapping("/login")
+//    public String login(@RequestBody LoginDto loginDto) {
+//        log.info("method POST in progress");
+//        if (authService.login(loginDto.getEmail(), loginDto.getPassword())) {
+//            return "redirect:/";
+//        } else {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build().toString();
+//        }
+//    }
 
 
 //    @Operation(description = "Login", responses = {
