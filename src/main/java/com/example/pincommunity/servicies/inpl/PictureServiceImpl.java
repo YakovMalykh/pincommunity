@@ -38,7 +38,7 @@ public class PictureServiceImpl implements ImageService<Picture> {
         picture.setPreview(preview);
 
         Picture savedPicture = pictureRepository.save(picture);//here I need get ID, for creating url and then write it into DB
-        savedPicture.setPictureUrl(String.format("/pictures/preview/%s" + savedPicture.getId()));
+        savedPicture.setPictureUrl(String.format("/pictures/preview/%s", savedPicture.getId()));
         log.info("Picture was saved");
         return pictureRepository.save(savedPicture);
     }
