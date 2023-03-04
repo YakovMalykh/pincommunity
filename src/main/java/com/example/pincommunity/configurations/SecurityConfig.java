@@ -42,8 +42,8 @@ public class SecurityConfig {
         http
                 .csrf().and()
                 .authorizeRequests(authorize -> authorize
-                        .mvcMatchers("/login","/registration","/swagger-ui/index.html").permitAll()
-                        .mvcMatchers("/**").authenticated()
+                        .mvcMatchers("/resources/**","/login","/home","/registration","/swagger-ui/index.html").permitAll()
+                    //    .mvcMatchers("/**").authenticated()
 //                        .mvcMatchers("/").permitAll()
 //                        .mvcMatchers("/registration").permitAll()
                 )
@@ -52,7 +52,8 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
+                .successForwardUrl("/loginpost")
+              // .defaultSuccessUrl("/", true)
                 .and()
                 .logout()
                 .and()

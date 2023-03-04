@@ -47,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean isMemberExists(String email) {
+        log.info("isMemberExists");
         Optional<Member> optionalMember = memberRepository.getMemberByUsernameIgnoreCase(email);
         return optionalMember.isPresent();
     }
@@ -96,5 +97,14 @@ public class MemberServiceImpl implements MemberService {
         log.info("Member " + authentication.getName() + " has been gotten");
         return ResponseEntity.ok(memberDto);
     }
-
+    @Override
+    public ResponseEntity<MemberDto> getMemberById (Long id) {
+        Member member = memberRepository.getMemberById(id).orElseThrow(() -> {
+            log.info("Member wasn't found. MemberServiceImpl.class, method getMemberById");
+            throw new MemberNotFoundException("Member wasn't found");
+        });
+        MemberDto memberDto = memberMapper.memberToMemberDto(member);
+        log.info("Member " + member.getUsername() + " has been gotten");
+        return ResponseEntity.ok(memberDto);
+    }
 }

@@ -17,4 +17,6 @@ public interface MemberService {
     ResponseEntity<MemberDto> updateMember(Long id, MemberDto memberDto);
 
     ResponseEntity<MemberDto> getMemberMe(Authentication authentication);
+
+    ResponseEntity<MemberDto> getMemberById(Long id);
 }

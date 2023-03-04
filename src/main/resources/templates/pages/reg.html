@@ -1,0 +1,48 @@
+<th:block th:fragment="formreg">
+    <form method="POST" th:action="@{/registration}" id="regForm" th:object="${createMemberDto}">
+        <!-- <form>
+        <div th:if="${param.error}" >
+            <p style="color:red">Unable to reg. Check your username and password.</p>
+        </div>-->
+        <!-- success message -->
+        <div th:if="${param.success}">
+            <div class="alert alert-info">You've successfully registered
+                to our community!</div>
+        </div>
+        <p>Please registration to our communite</p>
+
+        <div class="form-outline mb-1">
+            <input type="email" name="email" id="email_reg"  class="form-control"
+                   placeholder="Enter your email address" th:field="*{email}"/>
+            <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+            <label class="form-label" for="email_reg">Username</label>
+        </div>
+
+        <div class="form-outline mb-2">
+            <input type="password" name="password_reg" id="password"  class="form-control"
+                   placeholder="Enter your password" th:field="*{password}"/>
+            <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            <label for="password" class="form-label">Password</label>
+
+        </div>
+        <div class="form-outline mb-3">
+            <input type="fullName" name="fullName" id="fullName"  class="form-control"
+                   placeholder="Enter your fullname" th:field="*{fullName}"/>
+            <div class="alert alert-warning" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+            <label for="fullName" class="form-label">FullName</label>
+
+        </div>
+        <div class="form-outline mb-2">
+            <button class="btn btn-primary mb-2 btn-block fa-lg gradient-custom-2  box-shadow-hover "
+                    type="submit" value="Registration">Registration
+            </button>
+            <br>
+        </div>
+        <div class="d-flex align-items-center justify-content-center pb-4">
+            <p>Already registrated? Click <a th:href="@{/login}">here</a> to login.</p>
+        </div>
+
+
+    </form>
+</th:block>

@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @Slf4j
 @Mapper
 public abstract class ClubMapper {
@@ -49,6 +51,9 @@ public abstract class ClubMapper {
     @Mapping(target = "clubAvatarUrl", source = "clubAvatar")
     public abstract ClubDto clubToClubDto(Club club);
 
+    @Mapping(target = "adminUsername", source = "admin")
+    @Mapping(target = "clubAvatarUrl", source = "clubAvatar")
+    public abstract List< ClubDto> clubsToClubDto(List<Club> clubs);
     public String avatarToString(Avatar avatar) {
         if (avatar != null) {
             return avatar.getAvatarUrl();

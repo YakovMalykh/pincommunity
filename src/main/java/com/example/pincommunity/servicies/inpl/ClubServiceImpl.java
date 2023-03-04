@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Slf4j
 @Transactional
@@ -116,5 +117,18 @@ public class ClubServiceImpl implements ClubService {
         ClubDto clubDto = clubMapper.clubToClubDto(club);
         log.info("get club " + clubDto.getCity());
         return ResponseEntity.ok(clubDto);
+    }
+
+    @Override
+    public ResponseEntity<List<ClubDto>> getAllClubs() {
+        List<Club> clubs = clubRepository.findAll();
+        List<ClubDto> clubDto = clubMapper.clubsToClubDto(clubs);
+        return ResponseEntity.ok(clubDto);
+    }
+    @Override
+    public List<ClubDto> getAllClubsH() {
+        List<Club> clubs = clubRepository.findAll();
+        List<ClubDto> clubDto = clubMapper.clubsToClubDto(clubs);
+        return clubDto;
     }
 }

@@ -1,0 +1,7 @@
+<th:block th:fragment="clubs">
+
+    <ul class="menu_sidebar" th:each="club: ${clubs}">
+        <li class="menu__item"><a href="#" th:text="'Club from '+${club.city}">"Club from"  </a></li>
+    </ul>
+
+</th:block>
