@@ -6,6 +6,8 @@ import com.example.pincommunity.exceptions.ClubNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface ClubService {
     ResponseEntity<ClubDto> createClub(CreateClubDto createClubDto);
 
@@ -21,4 +23,7 @@ public interface ClubService {
      */
     ResponseEntity<ClubDto> getClubById(Long id);
 
+    ResponseEntity<List<ClubDto>> getAllClubs();
+
+    List<ClubDto> getAllClubsH();
 }

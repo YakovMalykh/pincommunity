@@ -9,18 +9,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 @Validated
-@RequestMapping("/clubs")// к этому контроллеру доступ только у SUPER_ADMIN
-//Поччему? разве клубы не может посмотреть просто гость?
+
+@RequestMapping("/clubs")//("/clubs")// к этому контроллеру доступ только у SUPER_ADMIN
+
 public class ClubController {
 
     private final ClubService clubService;
@@ -74,4 +77,22 @@ public class ClubController {
     public ResponseEntity<ClubDto> getClubById(@PathVariable Long id) {
         return clubService.getClubById(id);
     }
+    @Operation(summary = "get all clubs")
+    @GetMapping("/all")
+    public ResponseEntity<List<ClubDto>> getAllClubs()
+    {
+        return clubService.getAllClubs();
+    }
+    @ModelAttribute(name = "clubs")
+    public List<ClubDto> clubsView() {
+        return clubService.getAllClubsH();
+    }
+   @GetMapping("")
+    public String  clubs()
+    {
+        log.info("layouts/clubs.html");
+        return "layouts/clubs.html";
+    }
+
+
 }

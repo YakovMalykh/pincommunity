@@ -1,0 +1,33 @@
+<th:block th:fragment="formlogin">
+    <form method="POST" th:action="@{/login}" id="loginForm">
+        <!-- <form> -->
+        <div th:if="${param.error}">
+            <p style="color:red">Unable to login. Check your username and password.</p>
+        </div>
+        <p>Please login to your account</p>
+
+        <div class="form-outline mb-1">
+            <input type="email" name="email" id="email" class="form-control"
+                   placeholder="Enter your email address"/>
+            <label class="form-label" for="email">Username</label>
+        </div>
+
+        <div class="form-outline mb-2">
+            <input type="password" name="password" id="password" class="form-control"
+                   placeholder="Enter your password"/>
+            <label for="password" class="form-label">Password</label>
+
+        </div>
+
+        <div class="form-outline mb-2">
+            <button class="btn btn-primary mb-2 btn-block fa-lg gradient-custom-2  box-shadow-hover "
+                    type="submit" value="Login">Login
+            </button>
+            <br>
+        </div>
+        <div class="d-flex align-items-center justify-content-center pb-4">
+            <p>New here? Click <a th:href="@{/registration}">here</a> to registration.</p>
+        </div>
+
+    </form>
+</th:block>

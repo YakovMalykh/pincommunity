@@ -1,0 +1,55 @@
+<th:block th:fragment="default(route)">
+    <!doctype html>
+    <html lang="ru"
+          xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:insert="fragments/common.html :: meta"></th:block>
+        <th:block th:insert="fragments/common.html :: styles"></th:block>
+        <th:block th:insert="fragments/common.html :: title(${route})"></th:block>
+    </head>
+    <body>
+    <section class="layout-panel">
+        <div class="ui-block">
+            <div class="header">
+                <div class="content" id="content">
+                    <div class="container px-2 py-2 h-100">
+                        <div class="row d-flex justify-content-center align-items-center h-100">
+                            <div class="col-xl-10">
+                                <div class="card rounded-3 text-black">
+                                    <div class="row g-0">
+                                        <div class="col-lg-6">
+                                            <div class="card-body p-md-5 mx-md-4">
+                                                <div class="text-center ">
+                                                    <img src="/images/logo.png" class="logo pb-1"
+                                                         style="width: 185px;" alt="logo">
+                                                    <h4 class="mt-1 mb-5 pb-1">We are The Pincommunity</h4>
+                                                </div>
+
+                                                <th:block th:switch="${route}">
+                                                    <th:block th:case="login" th:insert="pages/login.html :: formlogin"></th:block>
+                                                    <th:block th:case="reg" th:insert="pages/reg.html :: formreg"></th:block>
+                                                    <div th:case="*">Unknown!</div>
+                                                </th:block>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                                                <h4 class="mb-4">We are more than just a community</h4>
+                                                <p class="small mb-0">Something text Something text Something text Something text
+                                                    Something text Something text Something text Something text </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </body>
+    </html>
+</th:block>
