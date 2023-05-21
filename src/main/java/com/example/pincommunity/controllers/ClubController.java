@@ -21,7 +21,9 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Validated
+
 @RequestMapping("/clubs")//("/clubs")// к этому контроллеру доступ только у SUPER_ADMIN
+
 public class ClubController {
 
     private final ClubService clubService;

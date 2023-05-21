@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class MemberController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "member or club doesn't exist")
     })
+    @PreAuthorize("@memberServiceImpl.getMemberById(#id).body.email.equals(authentication.principal.username) or hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<MemberDto> updateMember(@Valid @PathVariable Long id, @RequestBody MemberDto memberDto) {
         return memberService.updateMember(id, memberDto);
@@ -41,6 +43,7 @@ public class MemberController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "member doesn't exist")
     })
+    @PreAuthorize("@memberServiceImpl.getMemberById(#id).body.email.equals(authentication.principal.username) or hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateAvatar(@PathVariable Long id, @RequestPart MultipartFile file) {
         return memberService.updateAvatar(id, file);

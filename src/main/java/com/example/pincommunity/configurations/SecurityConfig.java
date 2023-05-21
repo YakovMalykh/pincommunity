@@ -23,6 +23,12 @@ public class SecurityConfig {
     }
 
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**","/swagger-ui.html", "/v3/api-docs",
+            "/pictures", "/pins","/pinsets",
+            "/members","/login", "/registration","/clubs", "/avatars/**"
+    };
+
     @Bean
     public PasswordEncoder passwordEncoder() {
        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -42,10 +48,12 @@ public class SecurityConfig {
         http
                 .csrf().and()
                 .authorizeRequests(authorize -> authorize
+
                         .mvcMatchers("/resources/**","/login","/home","/registration","/swagger-ui/index.html").permitAll()
                     //    .mvcMatchers("/**").authenticated()
 //                        .mvcMatchers("/").permitAll()
 //                        .mvcMatchers("/registration").permitAll()
+
                 )
                 .cors().and()
                 .formLogin()

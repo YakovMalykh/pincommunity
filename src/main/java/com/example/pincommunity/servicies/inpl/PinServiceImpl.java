@@ -1,14 +1,13 @@
 package com.example.pincommunity.servicies.inpl;
 
 import com.example.pincommunity.dto.*;
+import com.example.pincommunity.exceptions.MemberNotFoundException;
 import com.example.pincommunity.exceptions.PinNotFoundException;
-import com.example.pincommunity.exceptions.PinsetNotFoundException;
 import com.example.pincommunity.mappers.PinMapper;
 import com.example.pincommunity.models.Member;
 import com.example.pincommunity.models.Picture;
 import com.example.pincommunity.models.Pin;
 import com.example.pincommunity.repositories.MemberRepository;
-import com.example.pincommunity.repositories.PictureRepository;
 import com.example.pincommunity.repositories.PinRepository;
 import com.example.pincommunity.servicies.ImageService;
 import com.example.pincommunity.servicies.PinService;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,27 +28,27 @@ public class PinServiceImpl implements PinService {
     private final MemberRepository memberRepository;
     private final PinRepository pinRepository;
     private final PinMapper pinMapper;
-    private final PictureRepository pictureRepository;
-  //  private final ImageService imageService;
+
     @Qualifier("PictureServiceImpl")
     private final ImageService<Picture> pictureService;
 
-    public PinServiceImpl(PinRepository pinRepository, PinMapper pinMapper, PictureRepository pictureRepository, ImageService<Picture> pictureService,
+    public PinServiceImpl(PinRepository pinRepository, PinMapper pinMapper, ImageService<Picture> pictureService,
                           MemberRepository memberRepository) {
         this.pinRepository = pinRepository;
         this.pinMapper = pinMapper;
-        this.pictureRepository = pictureRepository;
-       // this.imageService = imageService;
         this.pictureService = pictureService;
         this.memberRepository = memberRepository;
     }
+
     @Override
 
     public ResponseEntity<PinDto> createPin(CreatePinDto createPinDto, MultipartFile file, Authentication auth) {
-       log.info("PinServiceImpl.createPin");
-        Member holder=memberRepository.getMemberByUsernameIgnoreCase(auth.getName()).orElseThrow();
+        log.info("PinServiceImpl.createPin");
+        Member holder = memberRepository.getMemberByUsernameIgnoreCase(auth.getName()).orElseThrow(() -> {
+            log.info("Member with name : " + auth.getName() + " doesn't exist. See PinServiceImpl.class, createPin method");
+            throw new MemberNotFoundException("Member with name : " + auth.getName() + " doesn't exist.");
+        });
         Pin pin = pinMapper.createPinDtoToPin(createPinDto);
-       System.out.println(pin);
         pin.setHolder(holder);
         Picture savedPicture = pictureService.saveImage(file, pin.getPinsName(), new Picture());
         pin.setPicture(savedPicture);
@@ -74,7 +72,7 @@ public class PinServiceImpl implements PinService {
     public ResponseEntity<PinDto> getPinById(Long id) {
         Pin pin = pinRepository.findById(id).orElseThrow(() -> {
             log.info("Pin by id " + id + " not found. PinServiceImpl, method getPinById");
-            throw new PinsetNotFoundException("Pin by id " + id + " not found");
+            throw new PinNotFoundException("Pin by id " + id + " not found");
         });
         PinDto pinDto = pinMapper.pinToPinDto(pin);
         return ResponseEntity.ok(pinDto);
@@ -82,12 +80,11 @@ public class PinServiceImpl implements PinService {
 
     @Override
     public ResponseEntity<PinDto> removePinById(Long id) {
-        String url = "pin" + "/" + id;
-        Optional<Picture> picture = pictureRepository.getByPictureUrl(url);
-        if (picture.isPresent()) {
-            pictureService.deleteImageById(picture.get().getId());
-        }
-        pictureRepository.deleteByPictureUrl(url);
+        Pin pin = pinRepository.findById(id).orElseThrow(() -> {
+            log.info("Pin by id " + id + " not found. PinServiceImpl, method updatePinset");
+            throw new PinNotFoundException("Pin by id " + id + " not found");
+        });
+        pictureService.deleteImageById(pin.getPicture().getId());
         pinRepository.deleteById(id);
         log.info("Pin with Id: " + id + "is deleted");
         return ResponseEntity.ok().build();

@@ -2,7 +2,8 @@ package com.example.pincommunity.mappers;
 
 import com.example.pincommunity.dto.CreatePinDto;
 import com.example.pincommunity.dto.PinDto;
-import com.example.pincommunity.exceptions.MemberNotFoundException;
+import com.example.pincommunity.exceptions.ClubNotFoundException;
+import com.example.pincommunity.exceptions.PinsetNotFoundException;
 import com.example.pincommunity.models.*;
 import com.example.pincommunity.repositories.ClubRepository;
 import com.example.pincommunity.repositories.MemberRepository;
@@ -33,7 +34,7 @@ public abstract class PinMapper {
     public Club stringToClub(String clubCity) {
         return clubRepository.findByCityIgnoreCase(clubCity).orElseThrow(() -> {
             log.info("Club for city: " + clubCity + " doesn't exist. See PinMapper.class, stringToClub method");
-            throw new MemberNotFoundException("Club for city: " + clubCity + " doesn't exist.");
+            throw new ClubNotFoundException("Club for city: " + clubCity + " doesn't exist.");
         });
     }
 
@@ -41,7 +42,7 @@ public abstract class PinMapper {
         if (pinsetName != null) {
             return pinsetRepository.findByPinsetNameIgnoreCase(pinsetName).orElseThrow(() -> {
                 log.info("Pinset with name: " + pinsetName + " doesn't exist. See PinMapper.class, stringToPinset method");
-                throw new MemberNotFoundException("Pinset with name: " + pinsetName + " doesn't exist.");
+                throw new PinsetNotFoundException("Pinset with name: " + pinsetName + " doesn't exist.");
             });
         } else {
             return null;
